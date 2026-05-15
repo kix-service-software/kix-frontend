@@ -6,34 +6,26 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<button 
-    type="button" 
-    class="btn p-0" 
+<button
+    type="button"
+    class="btn p-0"
     title=state.text
-    aria-label=state.text 
-    on-click("doAction")>
+    aria-label=state.text
+    on-click("doAction")
+    key=state.key>
     <div
+        key=state.key + "-actiondiv"
         class=[
             "action d-flex align-items-center overflow-hidden p-1",
             {
                 disabled: !state.canRunAction || state.lockRunAction,
             },
         ]>
-        <if(state.action.hasLink)>
-            <icon icon=(state.action.icon)/>
-        </if>
-        <else>
-            <icon icon=(state.action.icon)/>
-        </else>
-        <if(state.displayText && state.action.hasLink)>
-            <span class="text text-nowrap ms-2 text-truncate">
-                ${state.text}
-            </span>
-        </if>
-        <else-if(state.displayText)>
+        <icon icon=(state.action.icon)/>
+        <if(state.displayText)>
             <span class="ms-2 text text-nowrap text-truncate">
                 ${state.text}
             </span>
-        </else-if>
+        </if>
     </div>
 </button>

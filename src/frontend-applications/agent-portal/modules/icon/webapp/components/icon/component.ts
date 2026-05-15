@@ -34,7 +34,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.setIcon(this.icon);
+        await this.setIcon(this.icon);
+        setTimeout(() => this.state.prepared = true, 25);
     }
 
     private async setIcon(icon: ObjectIcon | string): Promise<void> {
@@ -58,7 +59,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     icon.Object, contextObject
                 );
                 this.objectId = await PlaceholderService.getInstance().replacePlaceholders(
-                    icon.ObjectId ? icon.ObjectId.toString() : '', contextObject
+                    icon.ObjectID ? icon.ObjectID.toString() : '', contextObject
                 );
 
                 const objectIcon = await ObjectIconService.getInstance().getObjectIcon(this.object, this.objectId);

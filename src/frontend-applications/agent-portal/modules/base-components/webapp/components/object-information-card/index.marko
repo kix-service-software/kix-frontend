@@ -47,38 +47,41 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                      <translation-string pattern=row.title/>
                   </div>
                </if>
-               <div
-                  class=[
-                     "info-row-content",
-                     {
-                        "no-title": !row.title,
-                        "created-by-row": component.isRowWithCreatedBy(index),
-                        separator: row.separator,
-                     },
-                  ]>
+               <div class=[
+                  "info-row-content",
+                  {
+                     "no-title": !row.title,
+                     "created-by-row": component.isRowWithCreatedBy(index),
+                     separator: row.separator,
+                  },
+               ]>
                   <for|group, groupIndex| of=row.values>
-                     <div class=[
-                        "info-group",
-                        {
-                           "only-icon":
-                              group.length === 1 &&
-                              group[0].componentId === "icon",
-                           "me-2": groupIndex === row.values.length - 1,
-                        },
-                     ]
-                     style=component.getLargestWidthFactor(group)>
+                     <div
+                        class=[
+                           "info-group",
+                           {
+                              "only-icon":
+                                 group.length === 1 &&
+                                 group[0].componentId === "icon",
+                              "me-2": groupIndex === row.values.length - 1,
+                           },
+                        ]
+                        style=component.getLargestWidthFactor(group)
+                     >
                         <for|info| of=group>
                            <if(info.componentId)>
                               <div>
                                  <div
                                     title=info.preparedText
-                                    style=info.textStyle>
+                                    style=info.textStyle
+                                 >
                                     ${info.preparedText}
                                  </div>
                                  <div class="component-value">
                                     <link-target
                                        routingConfiguration=info.routingConfiguration
-                                       objectId=info.routingObjectId>
+                                       objectId=info.routingObjectId
+                                    >
                                        <@content>
                                           <${
                                              component.getTemplate(
@@ -86,13 +89,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                              )
                                           }
                                              ...info.componentData
-                                             object=state.object/>
+                                             object=state.object
+                                          />
                                        </@content>
                                     </link-target>
                                  </div>
                               </div>
                            </if>
-                           <else-if(info.preparedText?.trim().length > 0)>
+                           <else-if(
+                              typeof info.preparedText === "string" &&
+                                 info.preparedText?.trim().length > 0,
+                           )>
                               <div class=[
                                  "info-value",
                                  {
@@ -101,27 +108,31 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                               ]>
                                  <div
                                     style=info.iconStyle
-                                    title=info.preparedText>
+                                    title=info.preparedText
+                                 >
                                     <icon icon=info.icon/>
                                  </div>
                                  <span
                                     style=info.textStyle
-                                    title=info.preparedText>
+                                    title=info.preparedText
+                                 >
                                     <if(info.routingConfiguration)>
                                        <link-target
                                           routingConfiguration=info.routingConfiguration
-                                          objectId=info.routingObjectId>
+                                          objectId=info.routingObjectId
+                                       >
                                           <@content>
                                              <show-text info=info/>
                                           </@content>
                                        </link-target>
                                     </if>
                                     <else-if(
-                                       info.linkSrc && info.preparedLinkSrc
+                                       info.linkSrc && info.preparedLinkSrc,
                                     )>
                                        <a
                                           href=info.preparedLinkSrc
-                                          target="_blank">
+                                          target="_blank"
+                                       >
                                           <show-text info=info/>
                                        </a>
                                     </else-if>

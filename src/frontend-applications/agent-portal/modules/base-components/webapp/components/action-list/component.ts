@@ -28,15 +28,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public expansionWidth: number;
 
     private resizeTimeout: ReturnType<typeof setTimeout>;
-    private prepareTimeout: ReturnType<typeof setTimeout>;
-    private visibleTimeout: ReturnType<typeof setTimeout>;
-    private observerTimeout: ReturnType<typeof setTimeout>;
-    private initialRefreshTimeout: ReturnType<typeof setTimeout>;
-    private actionPreparationRunning = false;
     private lastWrapperWidth = 0;
     private lastContentWidth = 0;
     private observeParent: boolean;
     private initialOpenDropdown: boolean;
+    private initialized: boolean;
+    private observe: boolean;
 
     public onCreate(input: any): void {
         super.onCreate(input, 'action-list');
@@ -47,24 +44,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.actionList = [];
         this.actionsToShow = [];
+
+        this.observeParent = super.getInputValue(input.observeParent, true);
     }
 
     public onInput(input: any): void {
         super.onInput(input);
-        this.observeParent = input.observeParent !== null && typeof input.observeParent === 'boolean'
-            ? input.observeParent
-            : true;
+        this.initialOpenDropdown = super.getInputValue(input.initialOpenDropdown);
+        this.state.displayText = super.getInputValue(input.displayText, true);
 
-        this.initialOpenDropdown = input.initialOpenDropdown;
-
-        this.state.displayText =
-            typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.actionList = input.list || [];
-        if (this.actionList?.length && this.actionListChanged()) {
+
+        if (this.initialized && this.actionList?.length && this.actionListChanged()) {
             this.updateActionList();
         }
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async onMount(): Promise<void> {
         await super.onMount();
 
@@ -92,17 +88,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 });
             }
             await this.actionsChanged();
+            if (this.observeParent) {
+                this.prepareObserver();
+            }
         } else if (this.actionsToShow.length) {
-            this.prepareActionLists();
-        }
-
-        if (this.observeParent) {
-            this.observerTimeout = setTimeout(this.prepareObserver.bind(this), 150);
-            this.initialRefreshTimeout = setTimeout(function (): void {
-                if (!this.actionPreparationRunning && this.actionsToShow?.length) {
-                    this.prepareActionLists();
+            this.state.listDefault = [...this.actionsToShow];
+            this.prepareActionLists().then(() => {
+                if (this.observeParent) {
+                    this.prepareObserver();
                 }
-            }.bind(this), 600);
+                this.initialized = true;
+            });
         }
 
         this.state.translations = await TranslationService.createTranslationObject([
@@ -127,20 +123,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.resizeTimeout) {
             clearTimeout(this.resizeTimeout);
         }
-        if (this.prepareTimeout) {
-            clearTimeout(this.prepareTimeout);
-        }
-        if (this.visibleTimeout) {
-            clearTimeout(this.visibleTimeout);
-        }
-        if (this.observerTimeout) {
-            clearTimeout(this.observerTimeout);
-        }
-        if (this.initialRefreshTimeout) {
-            clearTimeout(this.initialRefreshTimeout);
-        }
     }
 
+    // eslint-disable-next-line max-lines-per-function
     private prepareObserver(): void {
         if (!window.ResizeObserver) {
             return;
@@ -156,150 +141,166 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.lastWrapperWidth = wrapper.offsetWidth;
         this.lastContentWidth = actionListElement.scrollWidth;
 
-        this.observer = new ResizeObserver(() => {
-            if (!this.actionsToShow || !this.actionsToShow.length || this.actionPreparationRunning) {
-                return;
-            }
-
-            if (!wrapper.isConnected || !actionListElement.isConnected) {
-                if (this.observer) {
-                    this.observer.disconnect();
-                }
-                return;
-            }
-
-            const wrapperWidth = wrapper.offsetWidth;
-            const contentWidth = actionListElement.scrollWidth;
-
-            if (!wrapperWidth || !contentWidth) {
-                return;
-            }
-
-            const wrapperChanged = wrapperWidth !== this.lastWrapperWidth;
-            const growCheck = 5;
-            const contentGrew = contentWidth > this.lastContentWidth &&
-                contentWidth > wrapperWidth + growCheck;
-
-            this.lastWrapperWidth = wrapperWidth;
-            this.lastContentWidth = contentWidth;
-
-            if (wrapperChanged || contentGrew) {
-                actionListElement.classList.add('opacity-0');
-
-                if (this.resizeTimeout) {
-                    clearTimeout(this.resizeTimeout);
-                }
-                this.resizeTimeout = setTimeout(() => {
-                    this.prepareActionLists();
-                    this.resizeTimeout = null;
-                }, 150);
-            }
-        });
-
+        this.observer = new ResizeObserver(() => this.handleObservedParent(actionListElement, wrapper));
         this.observer.observe(wrapper);
         this.observer.observe(actionListElement);
+
+        this.observe = true;
     }
 
-    public prepareActionLists(): void {
-        if (this.visibleTimeout) {
-            clearTimeout(this.visibleTimeout);
-            this.visibleTimeout = null;
-        }
-        if (this.prepareTimeout) {
-            clearTimeout(this.prepareTimeout);
-            this.prepareTimeout = null;
-        }
-
-        const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
-        if (!actionListElement) {
-            this.state.prepared = true;
+    // eslint-disable-next-line max-lines-per-function
+    private handleObservedParent(actionListElement, wrapper): void {
+        if (!this.observe || !this.actionsToShow || !this.actionsToShow.length) {
             return;
         }
 
-        if (!actionListElement.offsetParent) {
-            this.visibleTimeout = setTimeout(this.prepareActionLists.bind(this), 200);
+        if (!wrapper.isConnected || !actionListElement.isConnected) {
+            if (this.observer) {
+                this.observer.disconnect();
+            }
             return;
         }
 
-        const parent = actionListElement.parentElement as HTMLElement | null;
+        const wrapperWidth = wrapper.offsetWidth;
+        const contentWidth = actionListElement.scrollWidth;
+
+        if (!wrapperWidth || !contentWidth) {
+            return;
+        }
+
+        const wrapperChanged = wrapperWidth !== this.lastWrapperWidth;
+        const growCheck = 5;
+        const contentGrew = contentWidth > this.lastContentWidth &&
+            contentWidth > wrapperWidth + growCheck;
+
+        this.lastWrapperWidth = wrapperWidth;
+        this.lastContentWidth = contentWidth;
+
+        if (wrapperChanged || contentGrew) {
+            actionListElement.classList.add('opacity-0');
+
+            if (this.resizeTimeout) {
+                clearTimeout(this.resizeTimeout);
+            }
+            this.resizeTimeout = setTimeout(() => {
+                this.prepareActionLists();
+            }, 150);
+        }
+    }
+
+    // eslint-disable-next-line max-lines-per-function
+    public async prepareActionLists(): Promise<void> {
+        // remove the observer to prevent resize trigger
+        if (this.observer) {
+            this.observe = false;
+        }
+
+        const actionListElement = await BrowserUtil.retry(
+            this.getActionListElement.bind(this), [], 5, 10
+        ).catch(() => null);
+
+        const parent = actionListElement?.parentElement as HTMLElement | null;
         const maxWidth = parent?.offsetWidth || 0;
 
         if (!maxWidth) {
-            this.state.prepared = true;
             return;
         }
 
         actionListElement.classList.add('opacity-0');
 
-        this.actionPreparationRunning = true;
+        (this as any).once('update', () => {
+            // use short timeout to make sure DOM update is done
+            // else some actions may be still in extension list and return wrong width
+            setTimeout(async () => {
+                this.calculateActionLists(maxWidth, actionListElement);
+            }, 50);
+        });
         this.state.listDefault = [...this.actionsToShow];
         this.state.listExpansion = [];
         (this as any).setStateDirty();
+    }
 
-        this.prepareTimeout = setTimeout(function (): void {
-            this.prepareTimeout = null;
+    private async calculateActionLists(maxWidth: number, actionListElement: any): Promise<void> {
+        const listDefault: Array<ActionGroup | IAction> = [];
+        const listExpansion: Array<ActionGroup | IAction> = [];
 
-            const listDefault: Array<ActionGroup | IAction> = [];
-            const listExpansion: Array<ActionGroup | IAction> = [];
+        if (this.actionsToShow.length) {
+            let actionsWidth = 0;
 
-            if (this.actionsToShow.length) {
-                let actionsWidth = 0;
+            for (const action of this.actionsToShow) {
+                const actionElement = await BrowserUtil.retry(
+                    this.getActionElement.bind(this), [`${this.state.key}${action['key']}`, action.text], 5, 10
+                ).catch(() => null);
+                if (actionElement) {
+                    const width = actionElement?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
 
-                for (const action of this.actionsToShow) {
-                    const element = (this as any).getEl(this.state.key + action['key']);
-                    const width =
-                        element?.offsetWidth ||
-                        ((this.state.displayText ? 16 : 3) * this.fontSize);
-
-                    if (actionsWidth + width < maxWidth) {
+                    if (!listExpansion.length && actionsWidth + width < maxWidth) {
                         listDefault.push(action);
                         actionsWidth += width;
                     } else {
                         listExpansion.push(action);
                     }
-                }
-
-                if (
-                    listDefault.length &&
-                    listExpansion.length &&
-                    (actionsWidth + this.expansionWidth) > maxWidth
-                ) {
-                    const removedElement = listDefault.pop();
-                    if (removedElement) {
-                        listExpansion.unshift(removedElement);
-                    }
-                }
+                };
             }
 
-            this.state.listDefault = listDefault;
-            this.state.listExpansion = listExpansion;
-            (this as any).setStateDirty();
-
-            actionListElement.classList.remove('opacity-0');
-            this.actionPreparationRunning = false;
-
-            this.lastContentWidth = actionListElement.scrollWidth;
-
-            if (this.initialOpenDropdown) {
-                setTimeout(function (): void {
-                    const dropdownElement = (this as any).getEl(`${this.state.key}action-list-expansion-button`);
-                    const dropdown = new bootstrap.Dropdown(dropdownElement);
-                    dropdown?.show();
-                }.bind(this), 50);
+            if (
+                listDefault.length
+                && listExpansion.length
+                && (actionsWidth + this.expansionWidth) > maxWidth
+            ) {
+                const removedElement = listDefault.pop();
+                if (removedElement) {
+                    listExpansion.unshift(removedElement);
+                }
             }
-            this.state.prepared = true;
+        }
 
-        }.bind(this), 200);
+        this.state.listDefault = listDefault;
+        this.state.listExpansion = listExpansion;
+        (this as any).setStateDirty();
+
+        actionListElement.classList.remove('opacity-0');
+
+        this.lastContentWidth = actionListElement.scrollWidth;
+
+        if (this.initialOpenDropdown) {
+            setTimeout(function (): void {
+                const dropdownElement = (this as any).getEl(`${this.state.key}action-list-expansion-button`);
+                const dropdown = new bootstrap.Dropdown(dropdownElement);
+                dropdown?.show();
+            }.bind(this), 50);
+        }
+
+        // register new observer
+        setTimeout(() => this.observe = true, 100);
+    }
+
+    private async getActionListElement(): Promise<HTMLElement> {
+        const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
+        if (!actionListElement) {
+            throw Error('no actionListElement');
+        }
+
+        if (!actionListElement.offsetParent) {
+            throw Error('no offsetParent');
+        }
+
+        return actionListElement;
+    }
+
+    private async getActionElement(key: string, actionText: string = ''): Promise<HTMLElement> {
+        const actionElement: HTMLElement = (this as any).getEl(key);
+        if (!actionElement) {
+            throw Error(`No actionElement found (${actionText})`);
+        }
+        return actionElement;
     }
 
     public async actionsChanged(): Promise<void> {
-        let actions;
-        if (this.context) {
-            actions = this.context.widgetService.getRegisteredActions(this.listenerInstanceId);
-        }
-        else {
-            actions = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
-        }
+        const actions = this.context
+            ? this.context.widgetService.getRegisteredActions(this.listenerInstanceId)
+            : WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
+
         if (actions) {
             this.actionList = actions[0];
             this.actionsToShow = await ActionFactory.getActionList(this.actionList);

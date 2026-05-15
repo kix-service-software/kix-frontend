@@ -154,9 +154,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </if>
     </if>
     <if(state.actions && state.actions.length)>
-        <action-list
-            contextInstanceId=input.contextInstanceId
-            list=state.actions/>
+        <div key="article-action-container">
+            <action-list
+                contextInstanceId=input.contextInstanceId
+                list=state.actions/>
+        </div>
     </if>
 </macro>
 

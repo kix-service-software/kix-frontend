@@ -131,4 +131,8 @@ export abstract class AbstractMarkoComponent<CS extends AbstractComponentState =
     protected getEventSubscriberId(): string {
         return this.eventSubscriberId;
     }
+
+    protected getInputValue<T = any>(value: any, fallback?: T): T {
+        return typeof value !== 'undefined' ? value : fallback;
+    }
 }
