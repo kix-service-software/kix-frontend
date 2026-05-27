@@ -118,8 +118,7 @@ describe('SSO Authentication', () => {
         const request = {
             cookies: {},
             headers: {
-                authorization: 'Negotiate negotiationToken',
-                'kix-application': 'agent-portal'
+                authorization: 'Negotiate negotiationToken'
             },
             query: {
                 redirectUrl: encodeURIComponent('/tickets/3')
@@ -133,7 +132,7 @@ describe('SSO Authentication', () => {
         }
 
         it('Should return true and redirect to redirectUrl.', async () => {
-            const ssoSuccess = await doSSOLogin(request as any, reply as any, true, '', UserType.AGENT);
+            const ssoSuccess = await doSSOLogin(request as any, reply as any, true, '', UserType.AGENT, 'agent-portal');
             expect(ssoSuccess).true;
         });
 
