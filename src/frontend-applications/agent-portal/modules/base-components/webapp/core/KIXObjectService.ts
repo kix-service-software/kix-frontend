@@ -122,6 +122,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 silent, collectionId
             ).catch((error: Error) => {
                 if (!silent && error?.Code !== 'SILENT') {
+                    if (error?.StatusCode === 401) {
+                        window.location.replace('/auth');
+                        return;
+                    }
                     // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {

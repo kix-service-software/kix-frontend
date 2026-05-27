@@ -18,6 +18,7 @@ import { ApplicationEvent } from '../../modules/base-components/webapp/core/Appl
 import { CollectionManager } from './CollectionManager';
 import { APIClient } from '../APIClient';
 import { RequestMethod } from '../../../../server/model/rest/RequestMethod';
+import { Error } from '../../../../server/model/Error';
 
 export class ObjectAPIClient extends APIClient {
 
@@ -138,6 +139,9 @@ export class ObjectAPIClient extends APIClient {
                 this.cachedCountMap.set(cacheKey, [result.objects?.length, limit, result.totalCount]);
             }
             objects = result.objects;
+        }
+        else if (response.status === 401) {
+            throw new Error(result?.Code, result?.Message, response.status);
         } else {
             const errorMessage = JSON.stringify(result);
             if (!silent) {

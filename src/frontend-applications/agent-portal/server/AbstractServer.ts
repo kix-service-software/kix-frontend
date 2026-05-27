@@ -101,6 +101,18 @@ export abstract class AbstractServer implements IServer {
             }
         });
 
+        fastify.setErrorHandler((error, req, reply) => {
+            if (error.name === 'SocketAuthenticationError') {
+                reply
+                    .status(401)
+                    .type('application/json')
+                    .send({
+                        Code: 401,
+                        Message: error.message
+                    });
+            }
+        });
+
         this.registerAuthenticationModule(fastify);
         this.registerStatic(fastify);
         this.registerRoutes(fastify);
