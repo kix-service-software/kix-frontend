@@ -139,9 +139,11 @@ export class ObjectAPIClient extends APIClient {
                 this.cachedCountMap.set(cacheKey, [result.objects?.length, limit, result.totalCount]);
             }
             objects = result.objects;
-        }
-        else if (response.status === 401) {
+        } else if (response.status === 401) {
             throw new Error(result?.Code, result?.Message, response.status);
+        } else if (response.status === 403 || result?.StatusCode === 403) {
+            console.error(result);
+            objects = [];
         } else {
             const errorMessage = JSON.stringify(result);
             if (!silent) {
