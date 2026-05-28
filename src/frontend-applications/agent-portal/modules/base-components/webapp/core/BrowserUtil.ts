@@ -646,7 +646,7 @@ export class BrowserUtil {
         }
     }
 
-    public static setFrameHeight(frameId: string, extraSpace: number = 20): void {
+    public static setFrameHeight(frameId: string, extraSpace: number = 50): void {
         const frame = document.getElementById(frameId) as HTMLIFrameElement;
 
         const frameInterval = this.frameIntervals.get(frameId);
@@ -658,7 +658,7 @@ export class BrowserUtil {
             const frameHeight = frame?.contentWindow?.document?.body?.scrollHeight || 0;
             if (frameHeight > 0) {
                 if (isNaN(extraSpace)) {
-                    extraSpace = 20;
+                    extraSpace = 50;
                 }
                 frame.style.height = frameHeight + extraSpace + 'px';
 

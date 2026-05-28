@@ -102,14 +102,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         super.registerEventSubscriber(
             function (data: any, eventId: string): void {
-                this.state.loading = data.loading;
-                this.state.loadingHint = data.hint;
-            },
-            [ApplicationEvent.APP_LOADING]
-        );
-
-        super.registerEventSubscriber(
-            function (data: any, eventId: string): void {
                 this.state.reload = true;
 
                 setTimeout(() => {

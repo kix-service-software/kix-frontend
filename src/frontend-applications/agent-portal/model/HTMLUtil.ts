@@ -7,7 +7,6 @@
  * --
  */
 
-import { ConfigurationService } from '../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../server/services/LoggingService';
 
 export class HTMLUtil {
@@ -80,7 +79,7 @@ export class HTMLUtil {
                 returnData['headers'] = headers;
             }
 
-            returnData['content'] = htmlDOM.window.document.documentElement.innerHTML;
+            returnData['content'] = htmlDOM.window.document.body.innerHTML;
 
             return returnData;
         } catch (e) {
@@ -89,13 +88,13 @@ export class HTMLUtil {
     }
 
     public static buildHtmlStructur(content: string, additionalHeader: string[] = []): string {
-        const baseRoute = ConfigurationService.getEnvString('BASE_ROUTE') || '';
         return `
-                    <html style="height: 100%;">
+                    <!DOCTYPE html>
+                    <html>
                         <head>
                             ${additionalHeader.join('\n')}
                         </head>
-                        <body style="height: 100%; overflow: auto">
+                        <body>
                             ${content}
                         </body>
                     </html>
