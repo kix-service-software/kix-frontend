@@ -64,7 +64,7 @@ export class ConfigItemDetailsContext extends Context {
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
         if (objectType === KIXObjectType.CONFIG_ITEM_VERSION) {
             const asset = await this.getObject<ConfigItem>();
-            return asset.Versions as any[];
+            return asset?.Versions as any[] || [];
         }
 
         return super.getObjectList(objectType);

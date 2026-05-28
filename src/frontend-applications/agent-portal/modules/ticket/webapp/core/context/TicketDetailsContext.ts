@@ -119,8 +119,8 @@ export class TicketDetailsContext extends Context {
                 } else {
                     BrowserUtil.openInfoOverlay(message);
                 }
-            }, 1500);
-        }, 200);
+            }, 1200);
+        }, 500);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
