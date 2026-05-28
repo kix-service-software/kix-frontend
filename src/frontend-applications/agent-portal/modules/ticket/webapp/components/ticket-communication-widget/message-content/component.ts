@@ -441,8 +441,10 @@ export class Component extends AbstractMarkoComponent<ComponentState, TicketDeta
 
     public toggleAttachments(e: any): void {
         e.stopPropagation();
+        e.preventDefault();
         this.state.showAllAttachments = !this.state.showAllAttachments;
         this.filterAttachments();
+        this.prepareImages();
     }
 
     public async switchAttachmentLayout(event: any): Promise<void> {
