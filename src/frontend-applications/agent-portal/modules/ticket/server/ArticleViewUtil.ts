@@ -40,6 +40,7 @@ export class ArticleViewUtil {
         );
 
         let content = '';
+        let isPlainText = false;
         if (articleResponse?.objects?.length) {
             const article = new Article(articleResponse.objects[0]);
 
@@ -52,17 +53,26 @@ export class ArticleViewUtil {
                     content = await this.replaceInlineStyle(content);
                 }
             } else {
-                content = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br />\n');
+                isPlainText = true;
+                content = article.Body
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+                content = `<pre>${content}</pre>`;
             }
         }
 
-        const cleanHTML: any = HTMLUtil.sanitizeContent(content);
-        const additionalHeader = cleanHTML?.headers;
-        content = cleanHTML?.content;
+        if (!isPlainText && content) {
+            const cleanHTML: any = HTMLUtil.sanitizeContent(content);
+            const additionalHeader = cleanHTML?.headers;
+            content = cleanHTML?.content;
 
-        // ignore kix styling (not needed in placeholder context, where reduce is used)
-        if (!reduceContent) {
-            content = HTMLUtil.buildHtmlStructur(content, additionalHeader);
+            // ignore kix styling (not needed in placeholder context, where reduce is used)
+            if (!reduceContent) {
+                content = HTMLUtil.buildHtmlStructur(content, additionalHeader);
+            }
         }
         return content;
     }
