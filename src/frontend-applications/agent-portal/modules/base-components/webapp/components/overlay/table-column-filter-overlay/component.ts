@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { TreeHandler, TreeService, TreeNode } from '../../../core/tree';
+import { TreeHandler, TreeService, TreeNode, TreeUtil } from '../../../core/tree';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
 import { DataType } from '../../../../../../model/DataType';
@@ -170,23 +170,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private setActiveFilterNodes(nodes: TreeNode[]): void {
+    private setActiveFilterNodes(tree: TreeNode[]): void {
         const filter = this.column.getFilter();
-        if (Array.isArray(filter) && Array.isArray(filter[1])) {
-            nodes.forEach((n) => {
-                const hasFilterValue = filter[1].some(
-                    (f) => (f.value as []).some((v: any) => {
-                        if (v instanceof KIXObject) {
-                            return v.equals(n.id);
-                        } else {
-                            return v === n.id;
-                        }
-                    })
-                );
-                if (hasFilterValue) {
-                    n.selected = true;
-                }
-            });
+        if (Array.isArray(filter?.[1])) {
+            const values = filter[1].map((fv) => fv.value).flat();
+            TreeUtil.setSelection(tree, values);
         }
     }
 
