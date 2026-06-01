@@ -8,12 +8,10 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Contact } from '../../../model/Contact';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContactProperty } from '../../../model/ContactProperty';
