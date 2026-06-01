@@ -11,6 +11,7 @@ import { AbstractAction } from '../../../../../../../modules/base-components/web
 import { Table } from '../../../../../../table/model/Table';
 import { TranslationService } from '../../../TranslationService';
 import { TranslationPattern } from '../../../../../model/TranslationPattern';
+import { TranslationRepository } from '../../../TranslationRepository';
 
 export class TranslationCSVExportAction extends AbstractAction<Table> {
 
@@ -49,12 +50,10 @@ export class TranslationCSVExportAction extends AbstractAction<Table> {
                 for (const l of languages) {
                     let translationString = '';
                     if (translation.AvailableLanguages.some((al) => al === l[0])) {
-                        const translated = await TranslationService.getInstance().getTranslationObject(
-                            translation.Value
+                        const translated = await TranslationRepository.getInstance().getTranslation(
+                            translation.Value, l[0]
                         );
-                        if (translated && translated.Languages && translated.Languages[l[0]]) {
-                            translationString = `"${this.escapeText(translated.Languages[l[0]])}"`;
-                        }
+                        translationString = `"${this.escapeText(translated)}"`;
                     }
                     translationStrings.push(translationString);
                 }
