@@ -280,4 +280,13 @@ export class TreeUtil {
         }
     }
 
+    public static setSelection(tree: TreeNode[], nodeIds: Array<string | number>): void {
+        for (const id of nodeIds) {
+            const node = this.findNode(tree, id);
+            if (node) {
+                node.selected = true;
+            }
+        }
+    }
+
 }
