@@ -197,4 +197,47 @@ export class ClientStorageService {
         }
     }
 
+    public static checkLocalStorage(): void {
+        const totalSizeMB = this.getLocalStorageSize();
+        console.log(`Size of Local Storage: ${totalSizeMB} MB`);
+
+        if (totalSizeMB > 4) {
+            this.clearLocalStorage();
+        }
+    }
+
+    public static clearLocalStorage(): void {
+        console.log('Clear local storage');
+        const keys = [
+            '.*OBJECT_SEARCH.*',
+            '.*-activetab',
+            '.*-minimized',
+            '.*-scrollpos',
+            '.*opened-sidebar.*',
+            '.*i18n-translations'
+        ];
+        for (const key in window.localStorage) {
+            if (key.match(keys.join('|'))?.length) {
+                window.localStorage.removeItem(key);
+            }
+        }
+
+        const totalSizeMB = this.getLocalStorageSize();
+        console.log(`Size of Local Storage: ${totalSizeMB} MB`);
+    }
+
+    public static getLocalStorageSize(): number {
+        let totalSize = 0;
+
+        for (const key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                const keySize = new Blob([key]).size; // Size of the key
+                const valueSize = new Blob([localStorage[key]]).size; // Size of the value
+                totalSize += keySize + valueSize;
+            }
+        }
+
+        return Number((totalSize / (1024 * 1024)).toFixed(2));
+    }
+
 }
