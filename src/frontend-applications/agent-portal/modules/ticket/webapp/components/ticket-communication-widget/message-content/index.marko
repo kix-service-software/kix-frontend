@@ -96,7 +96,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             Array.isArray(state.articleAttachments) &&
             state.articleAttachments.length
         )>
-            <div class="d-flex flex-column d-flex flex-column p-2 mb-3">
+            <div class="d-flex flex-column d-flex flex-column p-2 mb-2">
 
                 <div class="d-flex">
                     <div class=[
@@ -131,17 +131,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </else>
                     </span>
                 </div>
-
-                <if(state.hasInlineAttachments)>
-                    <a on-click("toggleAttachments") class="mt-2">
-                        <translation-string pattern=`Translatable#${
-                            state.showAllAttachments
-                                ? "Hide inline attachments"
-                                : "Show all attachments"
-                        }`/>
-                    </a>
-                </if>
             </div>
+        </if>
+        <if(state.hasInlineAttachments)>
+            <a on-click("toggleAttachments") class="ms-2 me-2 mb-2" href="">
+                <translation-string pattern=`Translatable#${
+                    state.showAllAttachments
+                        ? "Hide inline attachments"
+                        : "Show all attachments"
+                }`/>
+            </a>
         </if>
         <if(state.showArticleDFContainer)>
             <div
