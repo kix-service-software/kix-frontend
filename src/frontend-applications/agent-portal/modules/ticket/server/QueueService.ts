@@ -133,10 +133,7 @@ export class QueueAPIService extends KIXObjectAPIService {
 
         const id = await super.executeUpdateOrCreateRequest<number>(
             token, clientRequestId, parameter, this.RESOURCE_URI, this.objectType, 'QueueID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }
@@ -155,10 +152,7 @@ export class QueueAPIService extends KIXObjectAPIService {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const id = await super.executeUpdateOrCreateRequest<number>(
             token, clientRequestId, parameter, uri, this.objectType, 'QueueID'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }

@@ -101,7 +101,7 @@ export abstract class AbstractServer implements IServer {
             }
         });
 
-        fastify.setErrorHandler((error, req, reply) => {
+        fastify.setErrorHandler((error: any, req, reply) => {
             if (error.name === 'SocketAuthenticationError') {
                 reply
                     .status(401)
@@ -110,6 +110,11 @@ export abstract class AbstractServer implements IServer {
                         Code: 401,
                         Message: error.message
                     });
+            } else {
+                reply
+                    .code(error.statusCode || error.StatusCode || 400)
+                    .type('application/json')
+                    .send(error);
             }
         });
 

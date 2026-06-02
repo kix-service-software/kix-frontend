@@ -151,10 +151,7 @@ export class UserService extends KIXObjectAPIService {
 
             return await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID', true
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
         }
     }
@@ -207,10 +204,7 @@ export class UserService extends KIXObjectAPIService {
             const uri = this.buildUri(this.RESOURCE_URI, userId);
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, updateParameter, uri, this.objectType, 'UserID'
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
@@ -229,10 +223,7 @@ export class UserService extends KIXObjectAPIService {
             const uri = this.buildUri('session', 'user');
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, this.objectType, 'UserID'
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
             const user = await this.getUserByToken(token);
             CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${user.UserID}`);
@@ -315,11 +306,7 @@ export class UserService extends KIXObjectAPIService {
                         uri = this.buildUri('session', 'user', 'preferences', param[0]);
                     }
 
-                    await this.sendDeleteRequest<void>(token, clientRequestId, [uri], KIXObjectType.USER_PREFERENCE)
-                        .catch((error: Error) => {
-                            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                            throw new Error(error.Code, error.Message);
-                        });
+                    await this.sendDeleteRequest<void>(token, clientRequestId, [uri], KIXObjectType.USER_PREFERENCE);
                 }
             } else {
                 if (
@@ -361,10 +348,7 @@ export class UserService extends KIXObjectAPIService {
             token, clientRequestId, parameter,
             this.buildUri('session', 'markobjectasseen'), 'MarkObjectAsSeen', null,
             true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         CacheService.getInstance().deleteKeys(objectType);
     }
@@ -462,10 +446,7 @@ export class UserService extends KIXObjectAPIService {
 
         const response = await this.sendRequest(
             token, clientRequestId, uri, content, KIXObjectType.CONTACT, create, relevantOrganisationId
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return response.UserID;
     }

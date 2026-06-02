@@ -76,10 +76,7 @@ export class MailAccountService extends KIXObjectAPIService {
         const uri = this.buildUri('system', 'communication', 'mailaccounts');
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }
@@ -96,10 +93,7 @@ export class MailAccountService extends KIXObjectAPIService {
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }

@@ -85,10 +85,7 @@ export class TicketStateAPIService extends KIXObjectAPIService {
     ): Promise<number> {
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, this.RESOURCE_URI, this.objectType, 'TicketStateID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
         return id;
     }
 
@@ -99,10 +96,7 @@ export class TicketStateAPIService extends KIXObjectAPIService {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, this.objectType, 'TicketStateID'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
         return id;
     }
 

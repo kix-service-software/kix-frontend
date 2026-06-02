@@ -103,10 +103,7 @@ export class TranslationAPIService extends KIXObjectAPIService {
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, createParameter, uri, KIXObjectType.TRANSLATION_PATTERN,
                 'PatternID', true
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
             return id;
         }
@@ -165,11 +162,7 @@ export class TranslationAPIService extends KIXObjectAPIService {
                     );
                 } else {
                     const uri = this.buildUri('system', this.RESOURCE_URI, translationId, 'languages', param[0]);
-                    await this.sendDeleteRequest(token, clientRequestId, [uri], KIXObjectType.TRANSLATION_PATTERN)
-                        .catch((error: Error) => {
-                            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                            throw new Error(error.Code, error.Message);
-                        });
+                    await this.sendDeleteRequest(token, clientRequestId, [uri], KIXObjectType.TRANSLATION_PATTERN);
                 }
 
             } else if (this.hasValue(param[1])) {
@@ -183,10 +176,7 @@ export class TranslationAPIService extends KIXObjectAPIService {
                 await super.executeUpdateOrCreateRequest(
                     token, clientRequestId, createParameter, uri, KIXObjectType.TRANSLATION_LANGUAGE,
                     'TranslationLanguageID', true
-                ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
+                );
 
             }
         }

@@ -67,10 +67,7 @@ export class MailFilterAPIService extends KIXObjectAPIService {
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.MAIL_FILTER, 'MailFilterID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }
@@ -84,10 +81,7 @@ export class MailFilterAPIService extends KIXObjectAPIService {
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.MAIL_FILTER, 'MailFilterID'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }

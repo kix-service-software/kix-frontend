@@ -109,18 +109,12 @@ export class JobAPIService extends KIXObjectAPIService {
         let id;
 
         if (objectType === KIXObjectType.JOB) {
-            id = this.createJob(token, clientRequestId, parameter).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            id = this.createJob(token, clientRequestId, parameter);
         } else if (objectType === KIXObjectType.EXEC_PLAN) {
             id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, this.RESOURCE_URI_EXEC_PLAN, KIXObjectType.EXEC_PLAN,
                 'ExecPlanID', true
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
         }
 
         return id;
@@ -136,19 +130,12 @@ export class JobAPIService extends KIXObjectAPIService {
             clientRequestId = parameter.some((p) => p[0] === JobProperty.EXEC && p[1])
                 ? 'JobAPIService'
                 : clientRequestId;
-            id = await this.updateJob(token, clientRequestId, parameter, Number(objectId))
-                .catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
+            id = await this.updateJob(token, clientRequestId, parameter, Number(objectId));
         } else if (objectType === KIXObjectType.EXEC_PLAN) {
             const uri = this.buildUri(this.RESOURCE_URI_EXEC_PLAN, objectId);
             id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, KIXObjectType.EXEC_PLAN, 'ExecPlanID'
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
         }
 
         return id;
@@ -169,7 +156,7 @@ export class JobAPIService extends KIXObjectAPIService {
 
         const execPlanIds: number[] = await this.createOrUpdateExecPlansForJob(
             token, clientRequestId, parameter
-        ).catch((error) => { throw new Error(error.Code, error.Message); });
+        );
 
         if (execPlanIds.length) {
             jobParameter.push([JobProperty.EXEC_PLAN_IDS, execPlanIds]);
@@ -182,10 +169,7 @@ export class JobAPIService extends KIXObjectAPIService {
 
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, jobParameter, this.RESOURCE_URI, this.objectType, 'JobID', true
-        ).catch((error: Error) => {
-            this.deletePlansAndMacroOfNewJob(token, clientRequestId, execPlanIds);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }
@@ -213,9 +197,7 @@ export class JobAPIService extends KIXObjectAPIService {
                 loadingOptions.includes = [JobProperty.MACROS, JobProperty.EXEC_PLANS];
                 const objectResponse = await super.load<Job>(
                     token, KIXObjectType.JOB, this.RESOURCE_URI, loadingOptions, [jobId], 'Job', clientRequestId, Job
-                ).catch((error: Error) => {
-                    throw new Error(error.Code, error.Message);
-                });
+                );
 
                 const jobs = objectResponse?.objects || [];
                 if (jobs && !!jobs.length) {
@@ -223,18 +205,14 @@ export class JobAPIService extends KIXObjectAPIService {
 
                     const execPlanIds: number[] = await this.createOrUpdateExecPlansForJob(
                         token, clientRequestId, parameter, jobs[0]
-                    ).catch((error) => { throw new Error(error.Code, error.Message); });
+                    );
 
                     this.prepareFilterParameter(jobParameter);
 
                     const uri = this.buildUri(this.RESOURCE_URI, jobId);
                     await super.executeUpdateOrCreateRequest(
                         token, clientRequestId, jobParameter, uri, this.objectType, 'JobID'
-                    ).catch((error: Error) => {
-                        // TODO: if new ExecPlans and/or Macro were created, delete them
-                        // this.deletePlansAndMacroOfJob(token, clientRequestId, execPlanIds, macroId);
-                        throw new Error(error.Code, error.Message);
-                    });
+                    );
 
                     await this.updateJobExecPlanRelations(token, clientRequestId, jobs[0], execPlanIds);
                 }
@@ -242,9 +220,7 @@ export class JobAPIService extends KIXObjectAPIService {
                 const uri = this.buildUri(this.RESOURCE_URI, jobId);
                 await super.executeUpdateOrCreateRequest(
                     token, clientRequestId, jobParameter, uri, this.objectType, 'JobID'
-                ).catch((error: Error) => {
-                    throw new Error(error.Code, error.Message);
-                });
+                );
             }
         }
 
@@ -279,9 +255,6 @@ export class JobAPIService extends KIXObjectAPIService {
             eventExecPlans.length ? eventExecPlans[0].ID : undefined
         ).then((response) => {
             if (response) { execPlanIds.push(response); }
-        }).catch((error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
         });
 
         await this.createOrUpdateTimeBasedExecPlan(
@@ -294,8 +267,7 @@ export class JobAPIService extends KIXObjectAPIService {
             if (response) { execPlanIds.push(response); }
         }).catch((error) => {
             this.deletePlansAndMacroOfNewJob(token, clientRequestId, execPlanIds);
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
+            throw error;
         });
 
         return execPlanIds;
@@ -316,11 +288,11 @@ export class JobAPIService extends KIXObjectAPIService {
                 id = await this.updateObject(
                     token, clientRequestId, KIXObjectType.EXEC_PLAN, execPlanParameter, existingId,
                     undefined, undefined
-                ).catch((error) => { throw new Error(error.Code, error.Message); });
+                );
             } else {
                 id = await this.createObject(
                     token, clientRequestId, KIXObjectType.EXEC_PLAN, execPlanParameter
-                ).catch((error) => { throw new Error(error.Code, error.Message); });
+                );
             }
         }
         return id;
@@ -342,11 +314,11 @@ export class JobAPIService extends KIXObjectAPIService {
                 id = await this.updateObject(
                     token, clientRequestId, KIXObjectType.EXEC_PLAN, execPlanParameter, existingId,
                     undefined, undefined
-                ).catch((error) => { throw new Error(error.Code, error.Message); });
+                );
             } else {
                 id = await this.createObject(
                     token, clientRequestId, KIXObjectType.EXEC_PLAN, execPlanParameter
-                ).catch((error) => { throw new Error(error.Code, error.Message); });
+                );
             }
         }
         return id;

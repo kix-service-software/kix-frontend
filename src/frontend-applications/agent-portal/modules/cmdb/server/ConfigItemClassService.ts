@@ -129,10 +129,7 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
 
             const response = await this.sendCreateRequest<CreateConfigItemClassResponse, CreateConfigItemClassRequest>(
                 token, clientRequestId, uri, new CreateConfigItemClassRequest(createConfigItemClass), this.objectType
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
             const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
             if (icon) {
@@ -188,7 +185,7 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
                             `Could not create new definition of Config Item Class ${objectId}.`, error
                         );
                     } else {
-                        throw new Error(error.Code, error.Message);
+                        throw error;
                     }
                 });
             }

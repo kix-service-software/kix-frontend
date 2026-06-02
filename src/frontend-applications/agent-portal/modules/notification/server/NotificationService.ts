@@ -69,10 +69,7 @@ export class NotificationAPIService extends KIXObjectAPIService {
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, createParameter, this.RESOURCE_URI, KIXObjectType.NOTIFICATION,
             'NotificationID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }
@@ -85,10 +82,7 @@ export class NotificationAPIService extends KIXObjectAPIService {
         const updateParameter = this.prepareParameter(parameter);
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, updateParameter, uri, KIXObjectType.NOTIFICATION, 'NotificationID'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }

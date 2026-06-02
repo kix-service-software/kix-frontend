@@ -72,10 +72,7 @@ export class ConsoleCommandService extends KIXObjectAPIService {
     ): Promise<any> {
         const result = await super.executeUpdateOrCreateRequest<ConsoleExecuteResult>(
             token, clientRequestId, parameter, this.RESOURCE_URI, 'ConsoleExecute', null, true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
         return result;
     }
 
