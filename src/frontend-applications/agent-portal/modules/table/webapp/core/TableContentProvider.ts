@@ -155,6 +155,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         await this.table.reload();
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async loadData(): Promise<Array<RowObject<T>>> {
         let objects = [];
 
@@ -201,6 +202,12 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 loadingOptions, this.specificLoadingOptions,
                 forceIds, this.useCache, undefined, this.id
             ).catch(() => []);
+
+            if (this.objectIds) {
+                CollectionManager.getInstance().handleResult(
+                    this.id, this.currentLimit, this.currentLimit, this.objectIds.length
+                );
+            }
 
             if (this.currentLoadLimit) {
                 this.totalCount = CollectionManager.getInstance().getCollectionsCount(this.id);
@@ -292,6 +299,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {
         const sortOrder = this.sort?.length ?
             await KIXObjectService.getSortOrder(this.sort[0], this.sort[1], this.objectType) :
@@ -308,11 +316,13 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         );
 
         if (this.useBackendSort && this.objectIds?.length) {
+            let ids = this.objectIds;
+            if (this.currentLimit) {
+                ids = this.objectIds.splice(0, this.currentLimit);
+            }
+
             loadingOptions.filter.push(
-                new FilterCriteria(
-                    'ID', SearchOperator.IN,
-                    FilterDataType.NUMERIC, FilterType.AND, this.objectIds as any
-                )
+                new FilterCriteria('ID', SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, ids as any)
             );
         }
 
