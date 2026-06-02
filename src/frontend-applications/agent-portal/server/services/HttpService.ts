@@ -71,35 +71,37 @@ export class HttpService {
         };
 
         let cacheKey: string;
+        let promiseCacheKey: string;
         if (useCache) {
             cacheKey = await this.buildCacheKey(resource, queryParameters, token, useToken);
             const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
             if (cachedObject) {
                 return cachedObject;
             }
+            promiseCacheKey = `${cacheKeyPrefix};${cacheKey}`;
         }
 
-        if (cacheKey && this.requestPromises.has(cacheKey)) {
-            return this.requestPromises.get(cacheKey);
+        if (useCache && this.requestPromises.has(promiseCacheKey)) {
+            return this.requestPromises.get(promiseCacheKey);
         }
 
         const requestPromise = this.executeRequest<HTTPResponse>(resource, token, clientRequestId, options);
-        if (cacheKey) {
-            this.requestPromises.set(cacheKey, requestPromise);
+        if (useCache) {
+            this.requestPromises.set(promiseCacheKey, requestPromise);
         }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
 
         const response = await requestPromise.catch((error) => {
-            if (cacheKey) {
-                this.requestPromises.delete(cacheKey);
+            if (useCache) {
+                this.requestPromises.delete(promiseCacheKey);
             }
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
             throw error;
         });
 
-        if (cacheKey) {
-            this.requestPromises.delete(cacheKey);
+        if (useCache) {
+            this.requestPromises.delete(promiseCacheKey);
         }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
