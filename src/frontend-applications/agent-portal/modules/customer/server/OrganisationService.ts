@@ -112,10 +112,7 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         const response = await this.sendCreateRequest<CreateOrganisationResponse, CreateOrganisationRequest>(
             token, clientRequestId, this.RESOURCE_URI, new CreateOrganisationRequest(createOrganisation),
             this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {
@@ -139,10 +136,7 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         const response = await this.sendUpdateRequest<UpdateOrganisationResponse, UpdateOrganisationRequest>(
             token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
             new UpdateOrganisationRequest(updateOrganisation), this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {

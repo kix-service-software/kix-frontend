@@ -91,10 +91,7 @@ export class GeneralCatalogService extends KIXObjectAPIService {
         const uri = this.buildUri('system', 'generalcatalog');
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.GENERAL_CATALOG_ITEM, 'GeneralCatalogItemID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }
@@ -105,10 +102,7 @@ export class GeneralCatalogService extends KIXObjectAPIService {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const id = await super.executeUpdateOrCreateRequest<number>(
             token, clientRequestId, parameter, uri, this.objectType, 'GeneralCatalogItemID'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
         return id;
     }
 

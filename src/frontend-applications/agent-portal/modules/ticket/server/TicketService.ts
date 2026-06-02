@@ -211,10 +211,7 @@ export class TicketAPIService extends KIXObjectAPIService {
 
             const ticketId = await super.executeUpdateOrCreateRequest<number>(
                 token, clientRequestId, ticketParameter, this.RESOURCE_URI, KIXObjectType.TICKET, 'TicketID', true
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
             await this.createLinks(
                 token, clientRequestId, ticketId, this.getParameterValue(ticketParameter, KIXObjectProperty.LINKS)
@@ -367,10 +364,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             const uri = this.buildUri(this.RESOURCE_URI, objectId);
             await super.executeUpdateOrCreateRequest<number>(
                 token, clientRequestId, parameter, uri, this.objectType, 'TicketID'
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
         }
         return objectId;
     }
@@ -420,20 +414,13 @@ export class TicketAPIService extends KIXObjectAPIService {
                 await this.sendRequest(
                     token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, articleCreate,
                     relevantOrganisationId
-                ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    // TODO: exetend error handling if more than one article will be created?
-                    throw new Error(error.Code, error.Message);
-                });
+                );
             }
         }
 
         const response = await this.sendRequest(
             token, clientRequestId, uri, content, KIXObjectType.TICKET, create, relevantOrganisationId
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return response[TicketProperty.TICKET_ID];
     }
@@ -615,10 +602,7 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         const watcherId = await super.executeUpdateOrCreateRequest<number>(
             token, clientRequestId, parameter, uri, KIXObjectType.WATCHER, 'WatcherID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return watcherId;
     }

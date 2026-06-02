@@ -96,10 +96,7 @@ export class OAuth2APIService extends KIXObjectAPIService {
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, requestObjectType, 'ProfileID', true, objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }
@@ -113,10 +110,7 @@ export class OAuth2APIService extends KIXObjectAPIService {
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, 'Profile', 'ProfileID', false, objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }

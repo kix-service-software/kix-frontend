@@ -67,10 +67,7 @@ export class PluginAPIService extends KIXObjectAPIService {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const id = await super.executeUpdateOrCreateRequest<string>(
             token, clientRequestId, parameter, uri, this.objectType, 'Product'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }

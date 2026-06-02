@@ -89,12 +89,7 @@ export class MacroAPIService extends KIXObjectAPIService {
         let id;
 
         if (objectType === KIXObjectType.MACRO) {
-            const result = await this.createOrUpdateMacros(token, clientRequestId, parameter, false)
-                .catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
-
+            const result = await this.createOrUpdateMacros(token, clientRequestId, parameter, false);
             if (result?.length) {
                 id = result[0];
             }
@@ -110,11 +105,7 @@ export class MacroAPIService extends KIXObjectAPIService {
         let id;
 
         if (objectType === KIXObjectType.MACRO) {
-            const result = await this.createOrUpdateMacros(token, clientRequestId, parameter, false)
-                .catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
+            const result = await this.createOrUpdateMacros(token, clientRequestId, parameter, false);
 
             if (result?.length) {
                 id = result[0];
@@ -125,10 +116,7 @@ export class MacroAPIService extends KIXObjectAPIService {
                 const uri = this.buildUri(this.RESOURCE_URI, objectId);
                 id = await super.executeUpdateOrCreateRequest(
                     token, clientRequestId, [[MacroProperty.EXEC, execParameter]], uri, KIXObjectType.MACRO, 'MacroID'
-                ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
+                );
 
                 CacheService.getInstance().deleteKeys(KIXObjectType.TICKET);
             }
@@ -144,10 +132,7 @@ export class MacroAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.MACRO) {
             await this.deleteMacro(
                 token, objectId as number,
-            ).catch((error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
         }
         else {
             return super.deleteObject(token, clientRequestId, objectType, objectId, cacheKeyPrefix, ressourceUri);
