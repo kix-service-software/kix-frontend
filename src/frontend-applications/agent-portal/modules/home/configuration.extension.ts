@@ -39,6 +39,7 @@ import { ReportingAPIService } from '../reporting/server/ReportingService';
 import { ReportDefinition } from '../reporting/model/ReportDefinition';
 import { ReportDefinitionProperty } from '../reporting/model/ReportDefinitionProperty';
 import { ObjectResponse } from '../../server/services/ObjectResponse';
+import { SysConfigService } from '../sysconfig/server/SysConfigService';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -46,12 +47,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         return HomeContext.CONTEXT_ID;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
         this.createOpenTicketTableWidgetConfiguration(configurations);
         this.createNewTicketTableWidgetConfiguration(configurations);
-        this.createMyTeamsTicketTableWidgetConfiruation(configurations);
+        const myTeamsWidget = await this.createMyTeamsTicketTableWidgetConfiruation();
 
 
         const notesSidebar = new WidgetConfiguration(
@@ -91,8 +93,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('tickets', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'home-dashboard-myTeams-widget', null,
-                        configurations.find((c) => c.id === 'home-dashboard-myteams-widget'),
+                        'home-dashboard-myteams-widget', null, myTeamsWidget,
                         [new UIComponentPermission('tickets', [CRUD.READ])]
 
                     )
@@ -332,16 +333,25 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(newTicketsWidget);
     }
 
-    private createMyTeamsTicketTableWidgetConfiruation(configurations: IConfiguration[]): void {
+    // eslint-disable-next-line max-lines-per-function
+    private async createMyTeamsTicketTableWidgetConfiruation(): Promise<WidgetConfiguration> {
+        const token = ConfigurationService.getBackendAPIToken();
+        await SysConfigService.getInstance().deleteObjects(
+            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+            [
+                'home-dashboard-ticket-table-myteams',
+                'home-dashboard-ticket-table-myteams-widget',
+                'home-dashboard-myteams-widget'
+            ]
+        );
+
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.filter = [
             new FilterCriteria(
-                TicketProperty.MY_QUEUES, SearchOperator.EQUALS,
-                FilterDataType.NUMERIC, FilterType.AND, 1
+                TicketProperty.MY_QUEUES, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
             ),
             new FilterCriteria(
-                TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, 'Open'
+                TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
             )
         ];
         loadingOptions.sortOrder = 'Ticket.CreateTime:datetime';
@@ -350,29 +360,22 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const tableConfiguration = new TableConfiguration(
             'home-dashboard-ticket-table-myteams', 'Translatable#My Teams Table',
-            ConfigurationType.Table,
-            KIXObjectType.TICKET, loadingOptions, null, null, null, true, true
+            ConfigurationType.Table, KIXObjectType.TICKET, loadingOptions, null, null, null, true, true
         );
-        configurations.push(tableConfiguration);
 
         const tableWidgetConfiguration = new TableWidgetConfiguration(
             'home-dashboard-ticket-table-myteams-widget', 'Translatable#My Teams Table Widget',
-            ConfigurationType.TableWidget, KIXObjectType.TICKET, null,
-            new ConfigurationDefinition('home-dashboard-ticket-table-myteams', ConfigurationType.Table)
+            ConfigurationType.TableWidget, KIXObjectType.TICKET, null, null, tableConfiguration
         );
-        configurations.push(tableWidgetConfiguration);
 
         const widgetConfiguration = new WidgetConfiguration(
-            'home-dashboard-myteams-widget', 'Translatable#My Teams Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#My Teams',
-            [
-                'bulk-action', 'ticket-bulk-print-action', 'csv-export-action'
-            ],
-            new ConfigurationDefinition('home-dashboard-ticket-table-myteams-widget', ConfigurationType.TableWidget),
-            null, false, true, 'kix-icon-ticket', false
+            'home-dashboard-myteams-widget', 'Translatable#My Teams Widget', ConfigurationType.Widget, 'table-widget',
+            'Translatable#My Teams', ['bulk-action', 'ticket-bulk-print-action', 'csv-export-action'], null,
+            tableWidgetConfiguration, false, true, 'kix-icon-ticket', false
         );
         widgetConfiguration.valid = false;
-        configurations.push(widgetConfiguration);
+
+        return widgetConfiguration;
     }
 
 }
