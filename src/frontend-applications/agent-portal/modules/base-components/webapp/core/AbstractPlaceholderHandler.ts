@@ -12,6 +12,8 @@ import { IPlaceholderHandler } from './IPlaceholderHandler';
 import { PlaceholderService } from './PlaceholderService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextService } from './ContextService';
+import { Context } from 'mocha';
+import { ContextType } from '../../../../model/ContextType';
 
 export class AbstractPlaceholderHandler implements IPlaceholderHandler {
 
@@ -50,11 +52,11 @@ export class AbstractPlaceholderHandler implements IPlaceholderHandler {
     }
 
     public async prepareObject(object: KIXObject): Promise<void> {
-        const dialogContext = ContextService.getInstance().getActiveContext();
-        if (dialogContext) {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context?.descriptor?.contextType === ContextType.DIALOG) {
 
             // get object from context (will possibly be the current form object)
-            const contextObject = await dialogContext.getObject<KIXObject>(object.KIXObjectType);
+            const contextObject = await context.getObject<KIXObject>(object.KIXObjectType);
 
             // include in own object (do not overwrite object from context)
             this.setObject(object, contextObject);
