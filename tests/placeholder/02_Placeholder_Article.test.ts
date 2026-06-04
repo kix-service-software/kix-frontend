@@ -24,14 +24,14 @@ import { ContextService } from '../../src/frontend-applications/agent-portal/mod
 import { ContextDescriptor } from '../../src/frontend-applications/agent-portal/model/ContextDescriptor';
 import { Context } from '../../src/frontend-applications/agent-portal/model/Context';
 import { TranslationService } from '../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
-import { TicketService } from '../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
-import { InlineContent } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/InlineContent';
+import { EditTicketDialogContext, TicketService } from '../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
 import { SysConfigOption } from '../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOption';
 import { KIXObjectService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { DynamicFieldValue } from '../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldValue';
 import { DynamicField } from '../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicField';
 import { DynamicFieldTypes } from '../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldTypes';
+import { AdditionalContextInformation } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AdditionalContextInformation';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -81,12 +81,13 @@ describe('Placeholder replacement for article', () => {
         }
     });
 
-    after(() => {
+    after(async () => {
         (TranslationService.getInstance() as any).translations = null;
         LabelService.getInstance()['objectLabelProvider'] = [];
         LabelService.getInstance()['propertiesLabelProvider'].clear();
         TicketService.getInstance().getPreparedArticleBodyContent = orgPrepareFunction;
         KIXObjectService.loadObjects = orgLoadFunction;
+        await ContextService.getInstance().removeContext(EditTicketDialogContext.CONTEXT_ID);
     });
 
     describe('Replace simple article attribute placeholder.', async () => {
@@ -233,9 +234,21 @@ describe('Placeholder replacement for article', () => {
     });
 
     describe('Replace with right article placeholder.', async () => {
+        let orgFunction;
         before(() => {
             ticket = someTestFunctions.prepareTicket();
+
+            const newArticleContext = new newArticlePlaceholderDialogContext();
+            newArticleContext.setAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID, ticket.Articles[5].ArticleID);
+            orgFunction = ContextService.getInstance().getActiveContext;
+            ContextService.getInstance().getActiveContext = <T = Context>(): T => {
+                return newArticleContext as any;
+            }
         });
+
+        after(() => {
+            ContextService.getInstance().getActiveContext = orgFunction;
+        })
 
         it('Should replace article subject and body placeholder for first article', async () => {
             const subjectText = await ticketPlaceholderHandler.replace(`<KIX_FIRST_Subject>`, ticket);
@@ -273,36 +286,19 @@ describe('Placeholder replacement for article', () => {
             expect(bodyText).equal('This is the last customer article');
         });
 
-        describe('Replace with referenced article placeholder.', async () => {
-
-            let orgFunction;
-            before(async () => {
-                const newArticleContext = new newArticlePlaceholderDialogContext();
-                newArticleContext.setAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID, ticket.Articles[5].ArticleID);
-                orgFunction = ContextService.getInstance().getActiveContext;
-                ContextService.getInstance().getActiveContext = <T = Context>(): T => {
-                    return newArticleContext as any;
-                }
-            });
-
-            after(() => {
-                ContextService.getInstance().getActiveContext = orgFunction;
-            })
-
-            // it('Should replace article subject and body placeholder for referenced article', async () => {
-            //     const subjectText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_Subject>`, ticket);
-            //     expect(subjectText).exist;
-            //     expect(subjectText).equal(ticket.Articles[5].Subject);
-            //     const bodyText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_Body>`, ticket);
-            //     expect(bodyText).exist;
-            //     expect(bodyText).equal(ticket.Articles[5].Body);
-            // });
+        it('Should replace article subject and body placeholder for referenced article', async () => {
+            const subjectText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_Subject>`, ticket);
+            expect(subjectText).exist;
+            expect(subjectText).equal(ticket.Articles[5].Subject);
+            const bodyText = await ticketPlaceholderHandler.replace(`<KIX_ARTICLE_Body>`, ticket);
+            expect(bodyText).exist;
+            expect(bodyText).equal(ticket.Articles[5].Body);
         });
 
         describe('Replace with dynamic field article placeholder.', async () => {
 
             let orgContextFunction, orgServiceFunction;
-            before(async () => {
+            before(() => {
                 const newArticleContext = new newArticlePlaceholderDialogContext();
                 newArticleContext.setAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID, ticket.Articles[5].ArticleID);
                 orgContextFunction = ContextService.getInstance().getActiveContext;
@@ -690,17 +686,25 @@ class someTestFunctions {
         article.IncomingTime = 456789;
         article.SenderTypeID = 1;
         article.SenderType = 'agent';
+        article.ChannelID = 1;
+        article.Channel = 'note';
+        article.Attachments = [];
 
         return article;
     }
 
     public static prepareTicket(): Ticket {
         const ticket = new Ticket();
+        ticket.TicketID = 1;
 
         const firstArticle = new Article();
+        firstArticle.ArticleID = 1;
         firstArticle.Subject = 'first article';
         firstArticle.Body = 'This is the first article';
-        firstArticle.ArticleID = 1;
+        firstArticle.ChannelID = 1;
+        firstArticle.Channel = 'note';
+        firstArticle.SenderTypeID = 2;
+        firstArticle.SenderType = 'system';
         firstArticle.DynamicFields = [
             new DynamicFieldValue(
                 {
@@ -708,12 +712,17 @@ class someTestFunctions {
                     Value: ['DF: first article'], DisplayValue: 'DF: first article'
                 } as DynamicFieldValue
             )
-        ]
+        ];
+        firstArticle.Attachments = [];
 
         const lastArticle = new Article();
+        lastArticle.ArticleID = 10;
         lastArticle.Subject = 'last article';
         lastArticle.Body = 'This is the last article';
-        lastArticle.ArticleID = 10;
+        lastArticle.ChannelID = 1;
+        lastArticle.Channel = 'note';
+        lastArticle.SenderTypeID = 2;
+        lastArticle.SenderType = 'system';
         lastArticle.DynamicFields = [
             new DynamicFieldValue(
                 {
@@ -721,21 +730,27 @@ class someTestFunctions {
                     Value: ['DF: last article'], DisplayValue: 'DF: last article'
                 } as DynamicFieldValue
             )
-        ]
+        ];
+        lastArticle.Attachments = [];
 
         const agentArticle = new Article();
+        agentArticle.ArticleID = 3;
         agentArticle.Subject = 'agent article';
         agentArticle.Body = 'This is a agent article';
         agentArticle.SenderTypeID = 1;
         agentArticle.SenderType = 'agent';
-        agentArticle.ArticleID = 3;
+        agentArticle.ChannelID = 1;
+        agentArticle.Channel = 'note';
+        agentArticle.Attachments = [];
 
         const agentArticle2 = new Article();
+        agentArticle2.ArticleID = 5;
         agentArticle2.Subject = 'agent article 2';
         agentArticle2.Body = 'This is a agent article 2';
         agentArticle2.SenderTypeID = 1;
         agentArticle2.SenderType = 'agent';
-        agentArticle2.ArticleID = 5;
+        agentArticle2.ChannelID = 1;
+        agentArticle2.Channel = 'note';
         agentArticle2.DynamicFields = [
             new DynamicFieldValue(
                 {
@@ -743,21 +758,27 @@ class someTestFunctions {
                     Value: ['DF: second agent article'], DisplayValue: 'DF: second agent article'
                 } as DynamicFieldValue
             )
-        ]
+        ];
+        agentArticle2.Attachments = [];
 
         const agentArticle3 = new Article();
+        agentArticle3.ArticleID = 7;
         agentArticle3.Subject = 'agent article 3';
         agentArticle3.Body = 'This is a agent article 3';
         agentArticle3.SenderTypeID = 1;
         agentArticle3.SenderType = 'agent';
-        agentArticle3.ArticleID = 7;
+        agentArticle3.ChannelID = 1;
+        agentArticle3.Channel = 'note';
+        agentArticle3.Attachments = [];
 
         const lastAgentArticle = new Article();
+        lastAgentArticle.ArticleID = 9;
         lastAgentArticle.Subject = 'last agent article';
         lastAgentArticle.Body = 'This is the last agent article';
         lastAgentArticle.SenderTypeID = 1;
         lastAgentArticle.SenderType = 'agent';
-        lastAgentArticle.ArticleID = 9;
+        lastAgentArticle.ChannelID = 1;
+        lastAgentArticle.Channel = 'note';
         lastAgentArticle.DynamicFields = [
             new DynamicFieldValue(
                 {
@@ -765,35 +786,47 @@ class someTestFunctions {
                     Value: ['DF: last agent article'], DisplayValue: 'DF: last agent article'
                 } as DynamicFieldValue
             )
-        ]
+        ];
+        lastAgentArticle.Attachments = [];
 
         const customerArticle = new Article();
+        customerArticle.ArticleID = 2;
         customerArticle.Subject = 'customer article';
         customerArticle.Body = 'This is a customer article';
         customerArticle.SenderTypeID = 2;
         customerArticle.SenderType = 'external';
-        customerArticle.ArticleID = 2;
+        customerArticle.ChannelID = 1;
+        customerArticle.Channel = 'note';
+        customerArticle.Attachments = [];
 
         const customerArticle2 = new Article();
+        customerArticle2.ArticleID = 4;
         customerArticle2.Subject = 'customer article 2';
         customerArticle2.Body = 'This is a customer article 2';
         customerArticle2.SenderTypeID = 2;
         customerArticle2.SenderType = 'external';
-        customerArticle2.ArticleID = 4;
+        customerArticle2.ChannelID = 1;
+        customerArticle2.Channel = 'note';
+        customerArticle2.Attachments = [];
 
         const customerArticle3 = new Article();
+        customerArticle3.ArticleID = 6;
         customerArticle3.Subject = 'customer article 3';
         customerArticle3.Body = 'This is a customer article 3';
         customerArticle3.SenderTypeID = 2;
         customerArticle3.SenderType = 'external';
-        customerArticle3.ArticleID = 6;
+        customerArticle3.ChannelID = 1;
+        customerArticle3.Channel = 'note';
+        customerArticle3.Attachments = [];
 
         const lastCustomerArticle = new Article();
+        lastCustomerArticle.ArticleID = 8;
         lastCustomerArticle.Subject = 'last customer article';
         lastCustomerArticle.Body = 'This is the last customer article';
         lastCustomerArticle.SenderTypeID = 2;
         lastCustomerArticle.SenderType = 'external';
-        lastCustomerArticle.ArticleID = 8;
+        lastCustomerArticle.ChannelID = 1;
+        lastCustomerArticle.Channel = 'note';
         lastCustomerArticle.DynamicFields = [
             new DynamicFieldValue(
                 {
@@ -801,7 +834,8 @@ class someTestFunctions {
                     Value: ['DF: last customer article'], DisplayValue: 'DF: last customer article'
                 } as DynamicFieldValue
             )
-        ]
+        ];
+        lastCustomerArticle.Attachments = [];
 
         ticket.Articles = [
             customerArticle,
