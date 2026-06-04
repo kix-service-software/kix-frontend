@@ -256,22 +256,11 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         translate?: boolean
     ): Promise<string> {
         let result = '';
-        const dialogContext = ContextService.getInstance().getActiveContext();
-        if (dialogContext) {
-
-            // TODO: currently only referenced article supported => article (values) of a dialog are not possible
-            // which article is expected when "KIX_ARTICLE" is used => currently referenced article ...
-            const articleId = dialogContext.getAdditionalInformation(
-                ArticleProperty.REFERENCED_ARTICLE_ID
+        const articles = await this.getArticles(ticket);
+        if (articles?.length) {
+            result = await ArticlePlaceholderHandler.getInstance().replace(
+                placeholder, articles[0], language, forRichtext, translate
             );
-            if (articleId) {
-                const articles = await this.getArticles(ticket, Number(articleId));
-                if (articles && articles.length) {
-                    result = await ArticlePlaceholderHandler.getInstance().replace(
-                        placeholder, articles[0], language, forRichtext
-                    );
-                }
-            }
         }
         return result;
     }
@@ -281,25 +270,25 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         translate?: boolean
     ): Promise<string> {
         let result = '';
-        const caArticles = await this.getArticles(ticket, null, objectString);
-        if (caArticles && !!caArticles.length) {
-            let lastArticle: Article;
+        const caArticles = await this.getArticles(ticket, objectString);
+        if (caArticles?.length) {
+            let article: Article;
             if (caArticles.length > 1) {
                 const relevantArticles = caArticles.filter(
                     (a) => a.SenderType === (objectString === 'AGENT' ? 'agent' : 'external')
                 );
-                lastArticle = SortUtil.sortObjects(
-                    relevantArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
-                )[0];
+                if (relevantArticles?.length) {
+                    article = SortUtil.sortObjects(
+                        relevantArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
+                    )[0];
+                }
+            } else {
+                article = caArticles[0];
             }
-            else {
-                lastArticle = caArticles[0];
-            }
-            if (lastArticle) {
-                result = await ArticlePlaceholderHandler.getInstance().replace(
-                    placeholder, lastArticle, language, forRichtext, translate
-                );
-            }
+
+            result = await ArticlePlaceholderHandler.getInstance().replace(
+                placeholder, article, language, forRichtext, translate
+            );
         }
         return result;
     }
@@ -309,8 +298,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         translate?: boolean
     ): Promise<string> {
         let result = '';
-        const flArticles = await this.getArticles(ticket, null, objectString);
-        if (flArticles && !!flArticles.length) {
+        const flArticles = await this.getArticles(ticket, objectString);
+        if (flArticles?.length) {
             let article: Article;
             if (flArticles.length > 1) {
                 article = SortUtil.sortObjects(
@@ -320,36 +309,58 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             } else {
                 article = flArticles[0];
             }
-            if (article) {
-                result = await ArticlePlaceholderHandler.getInstance().replace(
-                    placeholder, article, language, forRichtext, translate
-                );
-            }
+
+            result = await ArticlePlaceholderHandler.getInstance().replace(
+                placeholder, article, language, forRichtext, translate
+            );
         }
         return result;
     }
 
     private async getArticles(
-        ticket: Ticket, articleId?: number, objectString?: string
+        ticket: Ticket, objectString?: string
     ): Promise<Article[]> {
-        let articles: Article[] = [];
-        if (ticket?.Articles?.every((a) => a.ArticleID)) {
-            if (articleId) {
-                const article = ticket.Articles.find((a) => a.ArticleID === articleId);
-                if (article && article.Attachments?.length) {
-                    articles = [article];
-                } else {
-                    articles = await this.loadArticle(ticket.TicketID, articleId);
-                }
-            } else {
-                articles = ticket.Articles;
-            }
-        } else if (ticket?.TicketID && articleId) {
-            articles = await this.loadArticle(ticket.TicketID, articleId);
-        } else if (ticket?.TicketID && objectString) {
-            articles = await this.loadArticle(ticket.TicketID, null, objectString);
+
+        // get articleId from context
+        let articleId: number;
+        const activeContext = ContextService.getInstance().getActiveContext();
+        if (activeContext) {
+            // TODO: currently only referenced article supported => article (values) of a dialog are not possible
+            // which article is expected when "KIX_ARTICLE" is used => currently referenced article ...
+            articleId = activeContext.getAdditionalInformation(
+                ArticleProperty.REFERENCED_ARTICLE_ID
+            );
         }
-        return articles;
+
+        // check for real article entries
+        if (
+            articleId
+            && ticket?.Articles?.every(
+                (a) => a.ArticleID && a.ChannelID && a.SenderTypeID && a.Subject && a.Body
+                    && Array.isArray(a.Attachments)
+            )
+        ) {
+            if (objectString && !ticket.Articles.every((a) => a.ArticleID === articleId)) {
+                return ticket.Articles;
+            }
+            else if (!objectString) {
+                const article = ticket.Articles.find((a) => a.ArticleID === articleId);
+                if (article) {
+                    return [article];
+                }
+            }
+        }
+
+        // check for TicketID
+        if (!ticket?.TicketID) return [];
+
+        if (objectString) {
+            return await this.loadArticle(ticket.TicketID, null, objectString);
+        } else if (articleId) {
+            return await this.loadArticle(ticket.TicketID, articleId);
+        }
+
+        return [];
     }
 
     private async loadArticle(ticketId: number, articleId: number, objectString?: string): Promise<Article[]> {
@@ -542,14 +553,17 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         switch (objectString) {
             case 'LAST':
                 loadingOptions.limit = 1;
+                loadingOptions.searchLimit = 1;
                 loadingOptions.sortOrder = 'Article.-ID';
                 break;
             case 'FIRST':
                 loadingOptions.limit = 1;
+                loadingOptions.searchLimit = 1;
                 loadingOptions.sortOrder = 'Article.ID';
                 break;
             case 'CUSTOMER':
                 loadingOptions.limit = 1;
+                loadingOptions.searchLimit = 1;
                 loadingOptions.sortOrder = 'Article.-ID';
                 loadingOptions.filter = [
                     new FilterCriteria(
@@ -560,6 +574,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 break;
             case 'AGENT':
                 loadingOptions.limit = 1;
+                loadingOptions.searchLimit = 1;
                 loadingOptions.sortOrder = 'Article.-ID';
                 loadingOptions.filter = [
                     new FilterCriteria(
