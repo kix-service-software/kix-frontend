@@ -44,6 +44,7 @@ import { BccFormValueAction } from './form/form-values/actions/BccFormValueActio
 import { ReplyAllFormValueAction } from './form/form-values/actions/ReplyAllFormValueAction';
 import { CcFormValueAction } from './form/form-values/actions/CcFormValueAction';
 import { TicketObjectFormValueMapper } from './form/TicketObjectFormValueMapper';
+import { TicketStateRepository } from './TicketStateRepository';
 
 export class UIModule implements IUIModule {
 
@@ -89,6 +90,8 @@ export class UIModule implements IUIModule {
         ObjectFormRegistry.getInstance().registerFormValueAction(
             TicketProperty.CONTACT_ID, CreateContactFormValueAction
         );
+
+        TicketStateRepository.getInstance().init();
     }
 
     public async registerExtensions(): Promise<void> {
