@@ -48,6 +48,17 @@ export class AgentService extends KIXObjectService<User> {
         return AgentService.INSTANCE;
     }
 
+    private _userId: number;
+    private _user: User;
+
+    public get userId(): number {
+        return this._userId;
+    }
+
+    public get currentUser(): User {
+        return this._user;
+    }
+
     private constructor() {
         super(KIXObjectType.USER);
         this.objectConstructors.set(KIXObjectType.USER, [User]);
@@ -100,8 +111,10 @@ export class AgentService extends KIXObjectService<User> {
         return await UserAPIClient.getPersonalSettings();
     }
 
-    public getCurrentUser(): Promise<User> {
-        return SessionAPIClient.getCurrentUser();
+    public async getCurrentUser(): Promise<User> {
+        this._user = await SessionAPIClient.getCurrentUser();
+        this._userId = this._user.UserID;
+        return this._user;
     }
 
     public async setPreferencesByForm(): Promise<void> {
