@@ -176,7 +176,7 @@ export class ClientStorageService {
                 keys.push(key);
             }
         });
-        return keys;
+        return keys.map((k) => k.substring(`${this.application}-`.length));
     }
 
     public static initClientRequestId(): void {
