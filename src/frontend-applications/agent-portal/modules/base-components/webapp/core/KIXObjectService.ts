@@ -1114,6 +1114,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+            if (!dynamicField) {
+                return;
+            }
+
             for (const extendedService of this.extendedServices) {
                 const extendedSupport = extendedService.getBackendFilterTypeForDF(dynamicField, dep);
                 if (typeof extendedSupport !== 'undefined' && extendedSupport !== null) {
@@ -1121,7 +1125,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 }
             }
 
-            switch (dynamicField.FieldType) {
+            switch (dynamicField?.FieldType) {
                 case DynamicFieldTypes.SELECTION:
                     return BackendSearchDataType.NUMERIC;
                 case DynamicFieldTypes.CI_REFERENCE:
@@ -1199,13 +1203,18 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async isBackendFilterSupportedForDF(dfName: string, allowDates: boolean = false): Promise<boolean> {
         const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+        if (!dynamicField) {
+            return false;
+        }
+
         for (const extendedService of this.extendedServices) {
             const extendedSupport = extendedService.isBackendFilterSupportedForDF(dynamicField);
             if (typeof extendedSupport !== 'undefined' && extendedSupport !== null) {
                 return extendedSupport;
             }
         }
-        switch (dynamicField.FieldType) {
+
+        switch (dynamicField?.FieldType) {
             case DynamicFieldTypes.DATE:
             case DynamicFieldTypes.DATE_TIME:
                 return allowDates;
