@@ -11,6 +11,7 @@ import { Error } from '../../../server/model/Error';
 import { RequestMethod } from '../../../server/model/rest/RequestMethod';
 import { IdService } from '../model/IdService';
 import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
+import { NotificationWorker } from '../modules/notification/webapp/core/NotificationWorker';
 import { APIHeader } from '../server/api/APIHeader';
 
 export class APIClient {
@@ -60,6 +61,10 @@ export class APIClient {
             }
             console.error(`API Error - ${method} - ${relativeUrl} (${errorCode}: ${errorMessage})`);
             throw new Error(errorCode, errorMessage, response.status);
+        }
+
+        if ([RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE].some((m) => m === method)) {
+            NotificationWorker.getInstance().sendMessage({ forceNotificationLoad: true });
         }
 
         return response;

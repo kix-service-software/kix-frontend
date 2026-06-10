@@ -11,7 +11,6 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { APIUtil } from '../APIUtil';
 import { UserService } from '../../../modules/user/server/UserService';
 import { User } from '../../../modules/user/model/User';
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { routeConfiguration } from '../../routes/FastifyAuthentication';
 
 async function routes(fastify: FastifyInstance, options): Promise<void> {

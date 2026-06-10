@@ -16,6 +16,7 @@ import { ApplicationEvent } from './ApplicationEvent';
 import { BrowserCacheService } from './CacheService';
 import { SessionAPIClient } from '../../../../api-client/session/Session';
 import { AdminAPIClient } from '../../../../api-client/admin/Admin';
+import { WindowListener } from './WindowListener';
 
 export class NotificationHandler {
 

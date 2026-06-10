@@ -2,45 +2,71 @@ const beNotificationChannel = new BroadcastChannel('be-notifications');
 const portalNotificationChannel = new BroadcastChannel('portal-notifications');
 const workerChannel = new BroadcastChannel('worker-channel');
 
-let runningObjectEventPolling = false;
+let runningBENotificationPolling = false;
 let runningPortalNotificationPolling = false;
 
-workerChannel.addEventListener('message', (event) => {
-    if (event.data && event.data.objectEventURL) {
-        execObjectEventPolling(event.data.objectEventURL);
-    }
+let eventKey;
+let beNotificationInterval;
 
-    if (event.data && event.data.portalNotificationURL) {
-        execPortalNotificationPolling(event.data.portalNotificationURL);
+let application;
+let objectEventURL;
+
+workerChannel.addEventListener('message', (event) => {
+    if (event.data.forceNotificationLoad) {
+        clearInterval(beNotificationInterval);
+        runningBENotificationPolling = false;
+        loadBENotifications();
+        execObjectEventPolling();
+    } else {
+        application = event.data.application;
+
+        if (event.data && event.data.objectEventURL) {
+            objectEventURL = event.data.objectEventURL;
+            execObjectEventPolling();
+        }
+
+        if (event.data && event.data.portalNotificationURL) {
+            execPortalNotificationPolling(event.data.portalNotificationURL);
+        }
     }
 });
 
 
 // Object Events Polling
-
-async function execObjectEventPolling(url) {
-    if (url && !runningObjectEventPolling) {
-        while (true) {
-            runningObjectEventPolling = true;
-            await waitForObjectEvents(url);
-        }
+async function execObjectEventPolling() {
+    if (objectEventURL && !runningBENotificationPolling) {
+        runningBENotificationPolling = true;
+        beNotificationInterval = setInterval(() => loadBENotifications(), 5000);
     }
 }
 
-async function waitForObjectEvents(url) {
+async function loadBENotifications() {
     try {
-        const response = await fetch(url, {
+        const response = await fetch(`${objectEventURL}?eventKey=${eventKey}`, {
+            credentials: "include",
             headers: {
-                'kix-requestid': Date.now()
-            }
+                'kix-requestid': Date.now(),
+                'kix-application': application
+            },
         });
-        const result = await response?.json();
 
-        if (Array.isArray(result?.notifications)) {
-            beNotificationChannel.postMessage(result?.notifications);
+        if (response.status !== 200) {
+            runningBENotificationPolling = false;
+            clearInterval(beNotificationInterval);
+        } else {
+            const result = await response?.json();
+
+            if (result?.eventKey) {
+                eventKey = result.eventKey;
+            }
+            if (Array.isArray(result?.notifications)) {
+                beNotificationChannel.postMessage(result?.notifications);
+            }
         }
 
     } catch (e) {
+        clearInterval(beNotificationInterval);
+        runningBENotificationPolling = false;
         console.error(e);
     }
 }
@@ -49,9 +75,13 @@ async function waitForObjectEvents(url) {
 
 async function execPortalNotificationPolling(url) {
     if (url && !runningPortalNotificationPolling) {
+        runningPortalNotificationPolling = true;
+
         while (true) {
-            runningPortalNotificationPolling = true;
             await waitForPortalNotifications(url);
+            if (!runningBENotificationPolling) {
+                break;
+            }
         }
     }
 }
@@ -59,16 +89,21 @@ async function execPortalNotificationPolling(url) {
 async function waitForPortalNotifications(url) {
     try {
         const response = await fetch(url, {
+            credentials: "include",
             headers: {
-                'kix-requestid': Date.now()
+                'kix-requestid': Date.now(),
+                'kix-application': application
             }
         });
         const result = await response?.json();
 
-        if (result?.portalNotification) {
+        if (response.status !== 200) {
+            runningPortalNotificationPolling = false;
+        } else if (result?.portalNotification) {
             portalNotificationChannel.postMessage(result?.portalNotification);
         }
     } catch (e) {
+        runningPortalNotificationPolling = false;
         console.error(e);
     }
 }
