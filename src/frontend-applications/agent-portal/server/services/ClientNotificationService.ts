@@ -74,7 +74,7 @@ export class ClientNotificationService {
     }
 
     private handleNotifications(): void {
-        const events = this._events.splice(0, this._events.length - 1);
+        const events = this._events.splice(0, this._events.length);
         if (events?.length) {
             this.notificationsQueue.set(Date.now(), events);
         }
