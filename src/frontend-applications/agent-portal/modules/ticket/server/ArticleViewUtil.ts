@@ -32,7 +32,10 @@ export class ArticleViewUtil {
     ): Promise<string> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.includes.push(ArticleProperty.ATTACHMENTS, ArticleProperty.PLAIN);
-        loadingOptions.query.push(['RelevantOrganisationID', relevantOrganisationID?.toString()]);
+        loadingOptions.query.push(
+            ['RelevantOrganisationID', relevantOrganisationID?.toString()],
+            ['HTMLBodyAsAttachment', '1']
+        );
 
         const articleResponse = await TicketAPIService.getInstance().loadObjects<Article>(
             token, clientRequestId, KIXObjectType.ARTICLE, [articleId],
