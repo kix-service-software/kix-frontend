@@ -3,7 +3,6 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../base-components/webapp/core/EventService';
-import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { Translation } from '../../model/Translation';
 import { TranslationService } from './TranslationService';
 
@@ -21,6 +20,8 @@ export class TranslationRepository {
     private constructor() { }
 
     private db: IDBDatabase;
+
+    private reloading: boolean = false;
 
     private eventSubscriberId: string = IdService.generateDateBasedId();
 
@@ -161,12 +162,26 @@ export class TranslationRepository {
     private async cacheChanged(data: string[], eventId: string): Promise<void> {
         if (eventId === ApplicationEvent.CACHE_KEYS_DELETED) {
             if (data.some((d) => d === KIXObjectType.TRANSLATION)) {
-                TranslationRepository.getInstance().clear().then(() => this.loadTranslations());
+                TranslationRepository.getInstance().reloadTranslations();
             }
         } else if (eventId === ApplicationEvent.CACHE_CLEARED) {
-            TranslationRepository.getInstance().clear().then(() => this.loadTranslations());
+            TranslationRepository.getInstance().reloadTranslations();
         }
     }
+
+    private async reloadTranslations(): Promise<void> {
+        if (!this.reloading) {
+            this.reloading = true;
+
+            await this.clear();
+            await this.loadTranslations();
+
+            setTimeout(function (): void {
+                this.reloading = false;
+            }.bind(this), 100);
+        }
+    }
+
 
     private async loadTranslations(): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions([], null, 0);
