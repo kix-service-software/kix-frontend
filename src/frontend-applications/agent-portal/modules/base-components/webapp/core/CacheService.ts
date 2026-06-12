@@ -112,9 +112,11 @@ export class BrowserCacheService {
                 // .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
                 .filter((e) => !e.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN));
 
-            console.groupCollapsed('Cache Delete');
-            events.forEach((e) => this.deleteKeys(e.Namespace));
-            console.groupEnd();
+            if (events?.length) {
+                console.groupCollapsed('Cache Delete');
+                events.forEach((e) => this.deleteKeys(e.Namespace));
+                console.groupEnd();
+            }
         }
     }
 
