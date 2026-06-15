@@ -8,7 +8,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 <button
     type="button"
-    class="btn p-0"
+    class=["btn", `${input.inExpansion ? "w-100" : "p-0"}`]
     title=state.text
     aria-label=state.text
     on-click("doAction")
