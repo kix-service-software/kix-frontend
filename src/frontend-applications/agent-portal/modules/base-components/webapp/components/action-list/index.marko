@@ -7,9 +7,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<macro|{ actions, icon, text, groupKey, dropstart, style, isExpansion }|
-    name="action-list-dropdown"
->
+<macro|
+    { actions, icon, text, groupKey, dropstart, style, isExpansion },
+| name="action-list-dropdown">
     <div
         key=state.key + groupKey
         class=[
@@ -21,8 +21,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             },
         ]
         role="group"
-        style=style
-    >
+        style=style>
         <button
             key=state.key + groupKey + "-button"
             type="button"
@@ -30,24 +29,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             data-bs-toggle="dropdown"
             data-bs-auto-close="outside"
             aria-label=(state.translations["Translatable#Action list"])
-            aria-expanded="false"
-        >
+            aria-expanded="false">
             <div
                 class="action d-flex overflow-hidden"
-                key=state.key + groupKey + "-button-div"
-            >
+                key=state.key + groupKey + "-button-div">
                 <icon
                     icon=icon
                     class={
                         "me-2": !isExpansion,
                     }
-                    key=state.key + groupKey + "-button-icon"
-                />
+                    key=state.key + groupKey + "-button-icon"/>
                 <if(text)>
                     <span
                         class="text me-2 text-nowrap text-truncate"
-                        key=state.key + groupKey + "-button-text"
-                    >
+                        key=state.key + groupKey + "-button-text">
                         ${text}
                     </span>
                 </if>
@@ -56,18 +51,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <ul class="dropdown-menu p-0" key=state.key + groupKey + "-list">
             <for|action| of=actions>
                 <li
-                    class=[
-                        "list-group",
-                        "list-group-item",
-                        {
-                            "p-0": action.actions,
-                        },
-                    ]
+                    class="list-group list-group-item p-0"
                     style=(
                         !action.actions && !action.canRun() ? "cursor:auto" : ""
                     )
-                    key=state.key + action.key + "-list-element"
-                >
+                    key=state.key + action.key + "-list-element">
                     <if(action.actions)>
                         <action-list-dropdown
                             actions=action.actions
@@ -75,11 +63,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             text=action.text
                             groupKey=action.key
                             dropstart
-                            key=state.key + action.key + "-macro"
-                        />
+                            key=state.key + action.key + "-macro"/>
                     </if>
                     <else>
-                        <action action=action displayText/>
+                        <action action=action displayText inExpansion/>
                     </else>
                 </li>
             </for>
@@ -96,16 +83,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 icon=element.icon
                 text=state.displayText ? element.text : undefined
                 groupKey=element.key
-                key=state.key + element.key + "-macro"
-            />
+                key=state.key + element.key + "-macro"/>
         </if>
         <!-- create a single action -->
         <else>
             <action
                 action=element
                 displayText=state.displayText
-                key=state.key + element.key
-            />
+                key=state.key + element.key/>
         </else>
     </for>
 </macro>
@@ -113,21 +98,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div key=state.key + "-action-list-wrapper" class="action-list-wrapper w-100">
     <div
         key=state.key + "-action-list"
-        class="d-flex justify-content-end action-list opacity-0 h-100"
-    >
+        class="d-flex justify-content-end action-list opacity-0 h-100">
         <div class="btn-group" role="group" on-click("actionListClicked")>
             <action-list
                 contextInstanceId=input.contextInstanceId
-                actionList=state.listDefault
-            />
+                actionList=state.listDefault/>
             <if(state.listExpansion && state.listExpansion.length > 0)>
                 <action-list-dropdown
                     actions=state.listExpansion
                     icon="kix-icon-dots"
                     isExpansion
                     groupKey="action-list-expansion"
-                    key=state.key + "action-list-expansion-macro"
-                />
+                    key=state.key + "action-list-expansion-macro"/>
             </if>
         </div>
     </div>
