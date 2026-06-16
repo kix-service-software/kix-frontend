@@ -195,7 +195,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const faqArticleWidget = new WidgetConfiguration(
             'faq-article-content-widget', 'FAQ Article Content', ConfigurationType.Widget,
             'faq-article-content-widget', 'Translatable#FAQ Article',
-            ['faq-article-vote-action', 'faq-article-edit-action'],
+            ['faq-article-vote-action'],
             null, null, false, true, null, false
         );
 
