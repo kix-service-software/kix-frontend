@@ -322,6 +322,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private _lastRawHtml?: string;
     private _lastCleanHtml?: string;
     private _lastEmittedValue?: string;
+    private _lastNonEmptyExternalValue?: string;
+    private _ignoredTransientEmptyValue = false;
 
     public onCreate(input: any): void {
         super.onCreate(input);
@@ -339,19 +341,51 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.value = newValue;
 
         if (!this.editor) {
+            if (!this.isEmptyEditorValue(newValue)) {
+                this._lastNonEmptyExternalValue = newValue;
+            }
             return;
         }
 
         this.editor.setEditable(!this.readOnly);
         this.setEditorToolbarVisibility(!this.readOnly);
 
-        if (this._lastEmittedValue === newValue) {
+        const normalizedNewValue = normalizeForTiptap(newValue || '<p></p>');
+        const currentValue = this.editor.getHTML();
+        const normalizedCurrentValue = normalizeForTiptap(currentValue || '<p></p>');
+
+        const newValueIsEmpty = this.isEmptyEditorValue(normalizedNewValue);
+        const currentValueIsEmpty = this.isEmptyEditorValue(normalizedCurrentValue);
+
+        if (
+            newValueIsEmpty &&
+            !currentValueIsEmpty &&
+            this._lastNonEmptyExternalValue &&
+            !this._ignoredTransientEmptyValue
+        ) {
+            this._ignoredTransientEmptyValue = true;
+            return;
+        }
+
+        this._ignoredTransientEmptyValue = false;
+
+        if (!newValueIsEmpty) {
+            this._lastNonEmptyExternalValue = newValue;
+        } else {
+            this._lastNonEmptyExternalValue = undefined;
+        }
+
+        if (
+            this._lastEmittedValue === newValue ||
+            this._lastEmittedValue === normalizedNewValue ||
+            normalizedCurrentValue === normalizedNewValue
+        ) {
             return;
         }
 
         const { from, to } = this.editor.state.selection;
 
-        this.editor.commands.setContent(normalizeForTiptap(newValue), false, {
+        this.editor.commands.setContent(normalizedNewValue, false, {
             preserveWhitespace: 'full',
         });
 
@@ -359,7 +393,22 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const safeFrom = Math.min(from, size);
         const safeTo = Math.min(to, size);
 
-        this.editor.chain().setTextSelection({ from: safeFrom, to: safeTo }).focus().run();
+        this.editor.commands.setTextSelection({
+            from: safeFrom,
+            to: safeTo,
+        });
+    }
+
+    private isEmptyEditorValue(value: string | undefined | null): boolean {
+        if (!value) {
+            return true;
+        }
+
+        const normalized = normalizeForTiptap(value).trim();
+
+        return normalized === '' ||
+            normalized === '<p></p>' ||
+            normalized === '<p><br></p>';
     }
 
     private setEditorToolbarVisibility(visibility: boolean): void {
