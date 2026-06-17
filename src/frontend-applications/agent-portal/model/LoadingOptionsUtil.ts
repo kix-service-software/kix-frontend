@@ -50,19 +50,6 @@ export class LoadingOptionsUtil {
         return preparedLoadingOptions;
     }
 
-    private static async replaceCriteriaValuePlaceholder(
-        value: string, contextObject: KIXObject, searchValue: string, operator: string
-    ): Promise<string> {
-        value = await PlaceholderService.getInstance().replacePlaceholders(value?.toString(), contextObject);
-        value = value.replace(SearchProperty.SEARCH_VALUE, searchValue);
-
-        if (operator === SearchOperator.LIKE) {
-            value = `*${value}*`;
-        }
-
-        return value;
-    }
-
     private static async createFilterCriteria(
         criterion: FilterCriteria, contextObject: KIXObject, searchValue: string
     ): Promise<FilterCriteria> {
@@ -76,7 +63,11 @@ export class LoadingOptionsUtil {
                 const preparedValue = await this.replaceCriteriaValuePlaceholder(
                     v?.toString(), contextObject, searchValue, criterion.operator
                 );
-                values.push(preparedValue);
+                if (Array.isArray(preparedValue)) {
+                    values.push(...preparedValue);
+                } else {
+                    values.push(preparedValue);
+                }
             }
             preparedCriterion.value = values;
         } else if (typeof (criterion.value) === 'string') {
@@ -86,6 +77,22 @@ export class LoadingOptionsUtil {
         }
 
         return preparedCriterion;
+    }
+
+    private static async replaceCriteriaValuePlaceholder(
+        value: string, contextObject: KIXObject, searchValue: string, operator: string
+    ): Promise<string> {
+        value = await PlaceholderService.getInstance().replacePlaceholders(value?.toString(), contextObject);
+
+        if (typeof value === 'string') {
+            value = value.replace(SearchProperty.SEARCH_VALUE, searchValue);
+
+            if (operator === SearchOperator.LIKE) {
+                value = `*${value}*`;
+            }
+        }
+
+        return value;
     }
 
 }
