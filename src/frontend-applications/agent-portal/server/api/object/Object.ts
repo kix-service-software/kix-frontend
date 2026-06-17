@@ -49,7 +49,14 @@ async function loadObjects(req: FastifyRequest, reply: FastifyReply): Promise<vo
     let result;
     const service = KIXObjectServiceRegistry.getServiceInstance(objectType);
     if (service) {
-        const { token, profileRequestId } = APIUtil.getRequestData(req);
+        const { token, profileRequestId, relevantOrganisationId } = APIUtil.getRequestData(req);
+        if (relevantOrganisationId) {
+            if (!loadingOptions) {
+                loadingOptions = new KIXObjectLoadingOptions();
+            }
+            loadingOptions.query.push(['RelevantOrganisationID', relevantOrganisationId]);
+        }
+
         const objectResponse = await service.loadObjects(
             token, profileRequestId, objectType, objectIds,
             loadingOptions, objectLoadingOptions
