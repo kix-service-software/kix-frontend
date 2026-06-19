@@ -50,6 +50,7 @@ export class HttpService {
     private requestPromises: Map<string, Promise<any>> = new Map();
 
     private constructor() {
+        CacheService.getInstance().adddIgnorePrefixes(['USER_ROLE_IDS']);
         this.apiURL = ConfigurationService.getEnvString('BACKEND_API_URL');
         this.axios = require('axios');
     }
@@ -408,10 +409,12 @@ export class HttpService {
                     }
                 });
 
-            CacheService.getInstance().set(backendToken, response.data['User'], cacheType);
+            const user = response.data['User'];
+            CacheService.getInstance().set(backendToken, user, cacheType);
             HTTPRequestLogger.getInstance().stop(profileTaskId, response);
             this.requestPromises.delete(requestKey);
-            resolve(response.data['User']);
+            this.setUserRoleIds(user);
+            resolve(user);
         });
 
         this.requestPromises.set(requestKey, requestPromise);
