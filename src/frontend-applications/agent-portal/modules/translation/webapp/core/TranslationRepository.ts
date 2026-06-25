@@ -78,27 +78,30 @@ export class TranslationRepository {
             const objectStore = transaction?.objectStore(TranslationRepository.STORE_NAME);
 
             if (objectStore && transaction) {
-                for (const tx of translations) {
+                const pattern = [];
+                translations.forEach((tx) => {
                     for (const lang in tx.Languages) {
                         if (tx.Languages[lang]) {
-                            objectStore?.put({
-                                Pattern: tx.Pattern,
-                                Language: lang,
-                                Value: tx.Languages[lang]
-                            });
+                            pattern.push({ Pattern: tx.Pattern, Language: lang, Value: tx.Languages[lang] });
                         }
                     }
+                });
+
+                for (const p of pattern) {
+                    objectStore.put(p);
                 }
 
-                transaction.oncomplete = (): void => {
-                    resolve();
-                };
+                if (transaction) {
+                    transaction.oncomplete = (): void => {
+                        resolve();
+                    };
 
-                transaction.onerror = (e): void => {
-                    reject(e);
-                };
+                    transaction.onerror = (e): void => {
+                        reject(e);
+                    };
 
-                transaction.commit();
+                    transaction.commit();
+                }
             }
         });
     }
