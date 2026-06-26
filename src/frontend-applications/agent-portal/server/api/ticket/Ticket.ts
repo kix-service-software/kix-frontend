@@ -42,9 +42,12 @@ async function getArticlePage(req: FastifyRequest, reply: FastifyReply): Promise
     const templatePath = path.join('..', '..', '..', 'modules', 'ticket', 'webapp', 'components', 'article-view');
     const template = require(templatePath).default;
 
-    const { relevantOrganisationId, profileRequestId } = APIUtil.getRequestData(req);
+    const { profileRequestId } = APIUtil.getRequestData(req);
     const { ticketId, articleId } = req.params as any;
-    const { lineCount, reduceContent, resolveInlineCSS, prepareInline, application } = req.query as any;
+
+    const { RelevantOrganisationID, lineCount, reduceContent, resolveInlineCSS, prepareInline, application } =
+        req.query as any;
+
     const token = APIUtil.getToken(req, application);
 
     const linesCount = CheckUtil.isNumeric(lineCount) ? Number(lineCount) : null;
@@ -52,7 +55,7 @@ async function getArticlePage(req: FastifyRequest, reply: FastifyReply): Promise
     const content = await ArticleViewUtil.getArticleHTMLContent(
         token, articleId, ticketId, reduceContent === 'true',
         Number(resolveInlineCSS) === 1, linesCount, prepareInline === 'true',
-        relevantOrganisationId, profileRequestId
+        RelevantOrganisationID, profileRequestId
     );
 
     return (reply as any).marko(template, { content: content });
