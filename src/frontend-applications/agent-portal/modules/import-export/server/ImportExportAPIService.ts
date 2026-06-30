@@ -82,10 +82,7 @@ export class ImportExportAPIService extends KIXObjectAPIService {
                     execType === ImportExportTemplateRunTypes.EXPORT ?
                         ImportExportTemplateRunPostResult.EXPORT_CONTENT : ImportExportTemplateRunPostResult.TASK_ID,
                     true
-                ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
+                );
             } else {
                 throw new Error('', 'templateId is missing');
             }

@@ -8,20 +8,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 <button
     type="button"
-    class="btn p-0"
+    class=[
+        "btn",
+        `${input.inExpansion ? "w-100" : "p-0"}`,
+        {
+            "disabled border-0": !state.canRunAction || state.lockRunAction,
+        },
+    ]
     title=state.text
     aria-label=state.text
     on-click("doAction")
-    key=state.key>
+    key=state.key
+>
     <div
         key=state.key + "-actiondiv"
-        class=[
-            "action d-flex align-items-center overflow-hidden p-1",
-            {
-                disabled: !state.canRunAction || state.lockRunAction,
-            },
-        ]>
-        <icon icon=(state.action.icon)/>
+        class="action d-flex align-items-center overflow-hidden p-1"
+    >
+        <icon icon=state.action.icon/>
         <if(state.displayText)>
             <span class="ms-2 text text-nowrap text-truncate">
                 ${state.text}

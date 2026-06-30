@@ -11,14 +11,14 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { PortalNotificationService } from '../../../modules/portal-notification/server/PortalNotificationService';
 import { APIUtil } from '../APIUtil';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { BackendNotification } from '../../../model/BackendNotification';
 import { ClientNotificationService } from '../../services/ClientNotificationService';
+import { routeConfiguration } from '../../routes/FastifyAuthentication';
 
 async function routes(fastify: FastifyInstance, options): Promise<void> {
     fastify.get('/notifications/:userType', loadNotifications);
     fastify.get('/notifications/prelogin/:userType', loadPreloginNotifications);
-    fastify.get('/notifications/backend', waitForBackendNotifications);
-    fastify.get('/notifications/portal', waitForPortalNotifications);
+    fastify.get('/notifications/backend', routeConfiguration(fastify), waitForBackendNotifications);
+    fastify.get('/notifications/portal', routeConfiguration(fastify), waitForPortalNotifications);
 }
 
 async function loadNotifications(req: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -35,21 +35,10 @@ async function loadPreloginNotifications(req: FastifyRequest, reply: FastifyRepl
 
 
 async function waitForBackendNotifications(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    const { requestId } = APIUtil.getRequestData(req);
+    const lastEventKey = Number(APIUtil.getQueryValue(req, 'eventKey'));
 
-    const timeout = setTimeout(() => {
-        reply.status(200).send({ notifications: [] });
-        ClientNotificationService.getInstance().removeListener(requestId);
-    }, ConfigurationService.getEnvNumber('NOTIFICATION_POLLING_TIMEOUT') || 5000);
-
-    ClientNotificationService.getInstance().registerNotificationListener(
-        requestId,
-        (events: BackendNotification[]) => {
-            clearTimeout(timeout);
-            reply.status(200).send({ notifications: events });
-            ClientNotificationService.getInstance().removeListener(requestId);
-        }
-    );
+    const { eventKey, notifications } = ClientNotificationService.getInstance().getEvents(lastEventKey);
+    reply.status(200).send({ eventKey, notifications });
 
     return reply;
 }

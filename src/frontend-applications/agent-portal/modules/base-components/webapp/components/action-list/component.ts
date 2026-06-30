@@ -87,7 +87,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     actionsChanged: this.actionsChanged.bind(this)
                 });
             }
+
             await this.actionsChanged();
+            this.initialized = true;
+
             if (this.observeParent) {
                 this.prepareObserver();
             }
@@ -177,11 +180,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.lastContentWidth = contentWidth;
 
         if (wrapperChanged || contentGrew) {
-            actionListElement.classList.add('opacity-0');
+            actionListElement.classList.add('opacity-0', 'invisible');
 
             if (this.resizeTimeout) {
                 clearTimeout(this.resizeTimeout);
             }
+
             this.resizeTimeout = setTimeout(() => {
                 this.prepareActionLists();
             }, 150);
@@ -203,10 +207,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const maxWidth = parent?.offsetWidth || 0;
 
         if (!maxWidth) {
+            this.observe = true;
             return;
         }
 
-        actionListElement.classList.add('opacity-0');
+        actionListElement.classList.add('opacity-0', 'invisible');
 
         (this as any).once('update', () => {
             // use short timeout to make sure DOM update is done
@@ -223,32 +228,41 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private async calculateActionLists(maxWidth: number, actionListElement: any): Promise<void> {
         const listDefault: Array<ActionGroup | IAction> = [];
         const listExpansion: Array<ActionGroup | IAction> = [];
+        const listDefaultWidths: number[] = [];
 
         if (this.actionsToShow.length) {
             let actionsWidth = 0;
+            const gapWidth = this.fontSize;
 
             for (const action of this.actionsToShow) {
                 const actionElement = await BrowserUtil.retry(
                     this.getActionElement.bind(this), [`${this.state.key}${action['key']}`, action.text], 5, 10
                 ).catch(() => null);
+
                 if (actionElement) {
                     const width = actionElement?.offsetWidth || ((this.state.displayText ? 16 : 3) * this.fontSize);
+                    const actionWidth = width + gapWidth;
 
-                    if (!listExpansion.length && actionsWidth + width < maxWidth) {
+                    if (!listExpansion.length && actionsWidth + actionWidth < maxWidth) {
                         listDefault.push(action);
-                        actionsWidth += width;
+                        listDefaultWidths.push(actionWidth);
+                        actionsWidth += actionWidth;
                     } else {
                         listExpansion.push(action);
                     }
-                };
+                }
             }
 
-            if (
+            while (
                 listDefault.length
                 && listExpansion.length
-                && (actionsWidth + this.expansionWidth) > maxWidth
+                && (actionsWidth + this.expansionWidth + gapWidth) > maxWidth
             ) {
                 const removedElement = listDefault.pop();
+                const removedWidth = listDefaultWidths.pop() || 0;
+
+                actionsWidth -= removedWidth;
+
                 if (removedElement) {
                     listExpansion.unshift(removedElement);
                 }
@@ -259,7 +273,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.listExpansion = listExpansion;
         (this as any).setStateDirty();
 
-        actionListElement.classList.remove('opacity-0');
+        actionListElement.classList.remove('opacity-0', 'invisible');
 
         this.lastContentWidth = actionListElement.scrollWidth;
 
@@ -277,6 +291,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async getActionListElement(): Promise<HTMLElement> {
         const actionListElement: HTMLElement = (this as any).getEl(this.state.key + '-action-list');
+
         if (!actionListElement) {
             throw Error('no actionListElement');
         }
@@ -290,9 +305,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async getActionElement(key: string, actionText: string = ''): Promise<HTMLElement> {
         const actionElement: HTMLElement = (this as any).getEl(key);
+
         if (!actionElement) {
             throw Error(`No actionElement found (${actionText})`);
         }
+
         return actionElement;
     }
 

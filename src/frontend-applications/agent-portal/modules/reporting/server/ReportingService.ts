@@ -124,10 +124,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
                         ReportDefinition: reportDefinition[1]
                     },
                     KIXObjectType.REPORT_DEFINITION
-                ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
+                );
 
                 const id = response['ReportDefinitionID'];
 
@@ -152,10 +149,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
 
             const response = await this.sendCreateRequest(
                 token, clientRequestId, uri, { Report: reportParameter[1] }, this.objectType
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
             return response['ReportID'];
         }
@@ -176,10 +170,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
                     ReportDefinition: reportDefinition[1]
                 },
                 KIXObjectType.REPORT_DEFINITION
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
             const id = response['ReportDefinitionID'];
             const roleIds = parameter.filter((p) => p).find((p) => p[0] === ReportDefinitionProperty.ROLE_IDS);

@@ -18,6 +18,8 @@ import { ApplicationEvent } from '../../modules/base-components/webapp/core/Appl
 import { CollectionManager } from './CollectionManager';
 import { APIClient } from '../APIClient';
 import { RequestMethod } from '../../../../server/model/rest/RequestMethod';
+import { Error } from '../../../../server/model/Error';
+import { ClientStorageService } from '../../modules/base-components/webapp/core/ClientStorageService';
 
 export class ObjectAPIClient extends APIClient {
 
@@ -70,10 +72,14 @@ export class ObjectAPIClient extends APIClient {
             objectLoadingOptions: JSON.stringify(objectLoadingOptions)
         };
 
+        const cacheType = loadingOptions?.cacheType || objectType;
+        const relevantOrganisationId = ClientStorageService.getOption('RelevantOrganisationID');
+        const cacheKey = JSON.stringify(
+            { cacheType, objectIds, loadingOptions, objectLoadingOptions, orgaId: relevantOrganisationId }
+        );
+
         let requestPromise: Promise<T[]>;
         if (cache) {
-            const cacheType = loadingOptions?.cacheType || objectType;
-            const cacheKey = JSON.stringify({ cacheType, objectIds, loadingOptions, objectLoadingOptions });
 
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, cacheType);
             if (!requestPromise) {
@@ -96,7 +102,7 @@ export class ObjectAPIClient extends APIClient {
         } else {
             requestPromise = this.createLoadRequestPromise<T>(
                 objectType, objectIds, params, loadingOptions?.limit, objectConstructors,
-                timeout, silent, collectionId
+                timeout, silent, collectionId, cacheKey
             );
         }
 
@@ -138,6 +144,11 @@ export class ObjectAPIClient extends APIClient {
                 this.cachedCountMap.set(cacheKey, [result.objects?.length, limit, result.totalCount]);
             }
             objects = result.objects;
+        } else if (response.status === 401) {
+            throw new Error(result?.Code, result?.Message, response.status);
+        } else if (response.status === 403 || result?.StatusCode === 403) {
+            console.error(result);
+            objects = [];
         } else {
             const errorMessage = JSON.stringify(result);
             if (!silent) {

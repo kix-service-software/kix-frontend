@@ -16,7 +16,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 data-bs-toggle="collapse"
                 data-bs-target="#" + id
                 aria-expanded="true"
-                aria-controls=id>
+                aria-controls=id
+            >
                 ${title}
             </button>
         </h2>
@@ -24,13 +25,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             id=id
             class="accordion-collapse collapse show"
             role="document"
-            aria-labelledby=id + "header">
+            aria-labelledby=id + "header"
+        >
             <div class="accordion-body">
                 <iframe-content
                     html=(state.html[id])
                     sanboxAttributes=["allow-popups"]
                     calculateHeight
-                    title=title/>
+                    title=title
+                />
             </div>
         </div>
     </div>
@@ -41,26 +44,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         contextInstanceId=state.contextInstanceId
         instanceId=state.instanceId
         contextType="MAIN"
-        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-        actions=state.actions>
+        title=state.widgetConfiguration ? state.widgetConfiguration.title : ""
+        contentActions=state.actions
+    >
         <@content>
             <div class="row">
                 <div class="col-lg-10 col-md-8 col-sm-6">
                     <div class="accordion" id="faq-content-accordion">
                         <faq-content-item
                             id="field1"
-                            title=(state.translations["Translatable#Symptom"])/>
+                            title=(state.translations["Translatable#Symptom"])
+                        />
                         <faq-content-item
                             id="field2"
-                            title=(state.translations["Translatable#Cause"])/>
+                            title=(state.translations["Translatable#Cause"])
+                        />
                         <faq-content-item
                             id="field3"
-                            title=(
-                                state.translations["Translatable#Solution"]
-                            )/>
+                            title=(state.translations["Translatable#Solution"])
+                        />
                         <faq-content-item
                             id="field6"
-                            title=(state.translations["Translatable#Comment"])/>
+                            title=(state.translations["Translatable#Comment"])
+                        />
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-6">
@@ -91,7 +97,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <for|attachment| of=state.attachments>
                             <file-entry
                                 attachment=attachment
-                                on-fileClicked("download", attachment)/>
+                                on-fileClicked("download", attachment)
+                            />
                         </for>
                     </div>
                 </div>

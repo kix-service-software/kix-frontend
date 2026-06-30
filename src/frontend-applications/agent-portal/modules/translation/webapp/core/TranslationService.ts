@@ -21,12 +21,12 @@ import { AgentService } from '../../../user/webapp/core/AgentService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { User } from '../../../user/model/User';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { BackendNotification } from '../../../../model/BackendNotification';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { IdService } from '../../../../model/IdService';
+import { TranslationRepository } from './TranslationRepository';
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -42,12 +42,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     private readonly eventSubscriberId: string;
 
-    private loadTranslationPromise: Promise<void>;
-    private translations: any = null;
-
     private userLanguage: string = null;
-
-    private readonly STORAGE_KEY = 'i18n-translations';
     private activeLanguage: string | null = null;
 
     public static getCurrentLanguage(): string | null {
@@ -84,15 +79,6 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     private async init(): Promise<void> {
         this.userLanguage = await TranslationService.getUserLanguage();
-        EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEYS_DELETED, {
-            eventSubscriberId: this.eventSubscriberId,
-            eventPublished: this.cacheChanged.bind(this)
-        });
-
-        EventService.getInstance().subscribe(ApplicationEvent.CACHE_CLEARED, {
-            eventSubscriberId: this.eventSubscriberId,
-            eventPublished: this.cacheChanged.bind(this)
-        });
 
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
             eventSubscriberId: this.eventSubscriberId,
@@ -100,28 +86,11 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         });
     }
 
-    private async cacheChanged(data: string[], eventId: string): Promise<void> {
-        if (eventId === ApplicationEvent.CACHE_KEYS_DELETED) {
-            if (data.some((d) => d === KIXObjectType.TRANSLATION)) {
-                this.translations = null;
-                ClientStorageService.deleteState(this.STORAGE_KEY);
-            }
-        } else if (eventId === ApplicationEvent.CACHE_CLEARED) {
-            this.translations = null;
-            ClientStorageService.deleteState(this.STORAGE_KEY);
-        }
-    }
-
     private async languageChanged(data: BackendNotification, eventId: string): Promise<void> {
-        if (
-            eventId === ApplicationEvent.OBJECT_UPDATED
-            && data.Namespace === 'User.UserPreference'
-        ) {
+        if (eventId === ApplicationEvent.OBJECT_UPDATED && data.Namespace === 'User.UserPreference') {
             const currentUser = await AgentService.getInstance().getCurrentUser().catch((): User => null);
             if (data.ObjectID === `${currentUser.UserID}::${PersonalSettingsProperty.USER_LANGUAGE}`) {
                 this.userLanguage = await TranslationService.getUserLanguage();
-                this.translations = null;
-                ClientStorageService.deleteState(this.STORAGE_KEY);
 
                 const eventService = EventService.getInstance();
 
@@ -141,6 +110,29 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     public getLinkObjectName(): string {
         return 'Translation';
+    }
+
+    public static async translate(
+        pattern: string = '', placeholderValues: Array<string | number> = [], language?: string,
+        getOnlyPattern: boolean = false
+    ): Promise<string> {
+        let translationValue = this.prepareValue(pattern ? pattern : '');
+        const langToUse = this.getInstance().activeLanguage ?? language ?? this.getInstance().userLanguage;
+
+        if (!getOnlyPattern) {
+            translationValue = await TranslationRepository.getInstance().getTranslation(translationValue, langToUse);
+            translationValue = this.format(translationValue, placeholderValues.map(
+                (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
+            ));
+        }
+        return translationValue;
+    }
+
+    public static prepareValue(pattern: string = ''): string {
+        if (pattern && pattern.startsWith('Translatable' + '#')) {
+            pattern = pattern.replace('Translatable' + '#', '');
+        }
+        return pattern;
     }
 
     public async getLanguageName(lang: string): Promise<string> {
@@ -195,97 +187,6 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return true;
     }
 
-    public static prepareValue(pattern: string = ''): string {
-        if (pattern && pattern.startsWith('Translatable' + '#')) {
-            pattern = pattern.replace('Translatable' + '#', '');
-        }
-        return pattern;
-    }
-
-    public static async translate(
-        pattern: string = '',
-        placeholderValues: Array<string | number> = [],
-        language?: string,
-        getOnlyPattern: boolean = false
-    ): Promise<string> {
-        let translationValue = pattern ? pattern : '';
-        try {
-            if (translationValue !== null) {
-
-                translationValue = this.prepareValue(translationValue);
-
-                if (!getOnlyPattern) {
-                    const instance = this.getInstance();
-
-                    const translation = await instance.getTranslationObject(translationValue);
-
-                    if (translation) {
-                        const langToUse =
-                            instance.activeLanguage ?? language ?? instance.userLanguage;
-
-                        if (langToUse) {
-                            const translationLanguageValue = translation.Languages[langToUse];
-                            if (translationLanguageValue) {
-                                translationValue = translationLanguageValue;
-                            }
-                        }
-                    }
-
-                    translationValue = this.format(translationValue, placeholderValues.map(
-                        (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
-                    ));
-                }
-            }
-            const debug = ClientStorageService.getOption('i18n-debug');
-
-            if (debug && debug !== 'false' && debug !== '0') {
-                translationValue = 'TR-' + pattern;
-            }
-
-        } catch (error) {
-            // nothing
-        }
-        return translationValue;
-    }
-
-    public async getTranslationObject(translationValue: string): Promise<Translation> {
-        if (!this.translations) {
-            const cachedValue = ClientStorageService.getOption(this.STORAGE_KEY);
-            this.translations = cachedValue ? JSON.parse(cachedValue) : null;
-        }
-
-        if (!this.translations) {
-            if (!this.loadTranslationPromise) {
-                this.loadTranslationPromise = new Promise<void>(async (resolve, reject) => {
-                    this.userLanguage = await TranslationService.getUserLanguage();
-
-                    const loadingOptions = new KIXObjectLoadingOptions([], null, 0);
-                    const translations = await KIXObjectService.loadObjects<Translation>(
-                        KIXObjectType.TRANSLATION, null, loadingOptions
-                    );
-
-                    if (translations && translations.length) {
-                        this.translations = {};
-                        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-                        for (let i = 0; i < translations.length; i++) {
-                            this.translations[translations[i].ObjectId] = translations[i];
-                        }
-
-                        ClientStorageService.setOption(this.STORAGE_KEY, JSON.stringify(this.translations));
-                    }
-                    this.loadTranslationPromise = null;
-
-                    resolve();
-                });
-            }
-
-            await this.loadTranslationPromise;
-        }
-
-        return this.translations && translationValue
-            ? this.translations[translationValue]
-            : null;
-    }
 
     private static format(format: string, args: string[]): string {
         return format.replace(/{(\d+)}/g, (match, number) => {

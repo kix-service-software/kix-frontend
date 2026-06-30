@@ -7,7 +7,7 @@
  * --
  */
 
-import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyInstance, FastifyRequest, FastifyReply, RouteShorthandOptions } from 'fastify';
 import { APIUtil } from '../APIUtil';
 import { TicketAPIService } from '../../../modules/ticket/server/TicketService';
 import { Readable } from 'node:stream';
@@ -18,9 +18,21 @@ import path from 'path';
 import { routeConfiguration } from '../../routes/FastifyAuthentication';
 
 async function routes(fastify: FastifyInstance, options): Promise<void> {
+    const articleAttachmentOpts: RouteShorthandOptions = {
+        schema: {
+            querystring: {
+                properties: {
+                    asDownload: {
+                        type: 'boolean'
+                    }
+                }
+            }
+        }
+    };
     fastify.get('/tickets/:ticketId/articles/:articleId', getArticlePage);
     fastify.get(
-        '/tickets/:ticketId/articles/:articleId/:attachmentIds', routeConfiguration(fastify), loadArticleAttachments
+        '/tickets/:ticketId/articles/:articleId/:attachmentIds', routeConfiguration(fastify, articleAttachmentOpts),
+        loadArticleAttachments
     );
     fastify.get('/tickets/:ticketId/articles/:articleId/zip', routeConfiguration(fastify), loadArticleZipAttachment);
     fastify.post('/tickets/:ticketId/articles/:articleId/seen', routeConfiguration(fastify), setArticleSeenFlag);
@@ -30,9 +42,12 @@ async function getArticlePage(req: FastifyRequest, reply: FastifyReply): Promise
     const templatePath = path.join('..', '..', '..', 'modules', 'ticket', 'webapp', 'components', 'article-view');
     const template = require(templatePath).default;
 
-    const { relevantOrganisationId, profileRequestId } = APIUtil.getRequestData(req);
+    const { profileRequestId } = APIUtil.getRequestData(req);
     const { ticketId, articleId } = req.params as any;
-    const { lineCount, reduceContent, resolveInlineCSS, prepareInline, application } = req.query as any;
+
+    const { RelevantOrganisationID, lineCount, reduceContent, resolveInlineCSS, prepareInline, application } =
+        req.query as any;
+
     const token = APIUtil.getToken(req, application);
 
     const linesCount = CheckUtil.isNumeric(lineCount) ? Number(lineCount) : null;
@@ -40,7 +55,7 @@ async function getArticlePage(req: FastifyRequest, reply: FastifyReply): Promise
     const content = await ArticleViewUtil.getArticleHTMLContent(
         token, articleId, ticketId, reduceContent === 'true',
         Number(resolveInlineCSS) === 1, linesCount, prepareInline === 'true',
-        relevantOrganisationId, profileRequestId
+        RelevantOrganisationID, profileRequestId
     );
 
     return (reply as any).marko(template, { content: content });

@@ -119,11 +119,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         const response = await this.sendCreateRequest<CreateContactResponse, CreateContactRequest>(
             token, clientRequestId, this.RESOURCE_URI, new CreateContactRequest(createContact),
             this.objectType
-        ).catch((error: Error) => {
-            // for cleanup delete created user object
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {
@@ -164,10 +160,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         const response = await this.sendUpdateRequest<UpdateContactResponse, UpdateContactRequest>(
             token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId), new UpdateContactRequest(updateContact),
             this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {
@@ -269,10 +262,7 @@ export class ContactAPIService extends KIXObjectAPIService {
 
         const response = await this.sendRequest(
             token, clientRequestId, uri, content, KIXObjectType.CONTACT, create, relevantOrganisationId
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         if (icon?.Content) {
             icon.Object = KIXObjectType.CONTACT;

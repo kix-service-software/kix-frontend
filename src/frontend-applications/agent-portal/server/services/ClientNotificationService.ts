@@ -25,12 +25,28 @@ export class ClientNotificationService {
 
     private constructor() {
         RedisCache.getInstance().subscribe('KIXFrontendNotify', this.queueNotifications.bind(this));
+        setInterval(() => this.handleNotifications(), 2500);
     }
 
-    private notificationTimeout: any;
-    private notificationsQueue: BackendNotification[] = [];
+    private notificationsQueue: Map<number, BackendNotification[]> = new Map();
+    private _events: BackendNotification[] = [];
 
     private notificationListener: Map<string, (events: BackendNotification[]) => void> = new Map();
+
+    public getEvents(lastEventKey: number): { eventKey: number, notifications: BackendNotification[] } {
+        const notifications: BackendNotification[] = [];
+        let eventKey: number;
+        this.notificationsQueue.forEach((value: BackendNotification[], key: number) => {
+            if (!lastEventKey || key > lastEventKey) {
+                notifications.push(...value);
+                if (!eventKey || key > eventKey) {
+                    eventKey = key;
+                }
+
+            }
+        });
+        return { eventKey, notifications };
+    }
 
     public registerNotificationListener(id: string, listener: (events: BackendNotification[]) => void): void {
         this.notificationListener.set(id, listener);
@@ -41,31 +57,40 @@ export class ClientNotificationService {
     }
 
     public queueNotifications(objectEvents: BackendNotification[]): void {
-        if (this.notificationTimeout) {
-            clearTimeout(this.notificationTimeout);
-        }
-
         for (const event of objectEvents) {
-            const hasEvent = this.notificationsQueue.some(
+            const hasEvent = this._events.some(
                 (e) => e.Namespace === event.Namespace
                     && e.ObjectID === event.ObjectID
                     && e.UserID === event.UserID
             );
 
             if (!hasEvent) {
-                this.notificationsQueue.push(event);
+                this._events.push(event);
             }
         }
 
-        this.notificationTimeout = setTimeout(() => this.handleNotifications(), 500);
+        CacheService.getInstance().updateCaches(objectEvents)
+            .catch((error) => LoggingService.getInstance().error(error));
     }
 
-    private async handleNotifications(): Promise<void> {
-        await CacheService.getInstance().updateCaches(this.notificationsQueue)
-            .catch((error) => LoggingService.getInstance().error(error));
+    private handleNotifications(): void {
+        const events = this._events.splice(0, this._events.length);
+        if (events?.length) {
+            this.notificationsQueue.set(Date.now(), events);
+        }
+        this.cleanUpQueue();
+    }
 
-        this.notificationListener.forEach((l) => l(this.notificationsQueue));
-        this.notificationsQueue = [];
+    private cleanUpQueue(): void {
+        const keysToDelete = [];
+        const currentDate = Date.now();
+        this.notificationsQueue.forEach((value: BackendNotification[], key: number) => {
+            if (currentDate - key > 10000) {
+                keysToDelete.push(key);
+            }
+        });
+
+        keysToDelete.forEach((k) => this.notificationsQueue.delete(k));
     }
 
 }

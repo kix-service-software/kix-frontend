@@ -50,6 +50,7 @@ export class HttpService {
     private requestPromises: Map<string, Promise<any>> = new Map();
 
     private constructor() {
+        CacheService.getInstance().adddIgnorePrefixes(['USER_ROLE_IDS']);
         this.apiURL = ConfigurationService.getEnvString('BACKEND_API_URL');
         this.axios = require('axios');
     }
@@ -71,35 +72,37 @@ export class HttpService {
         };
 
         let cacheKey: string;
+        let promiseCacheKey: string;
         if (useCache) {
             cacheKey = await this.buildCacheKey(resource, queryParameters, token, useToken);
             const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
             if (cachedObject) {
                 return cachedObject;
             }
+            promiseCacheKey = `${cacheKeyPrefix};${cacheKey}`;
         }
 
-        if (cacheKey && this.requestPromises.has(cacheKey)) {
-            return this.requestPromises.get(cacheKey);
+        if (useCache && this.requestPromises.has(promiseCacheKey)) {
+            return this.requestPromises.get(promiseCacheKey);
         }
 
         const requestPromise = this.executeRequest<HTTPResponse>(resource, token, clientRequestId, options);
-        if (cacheKey) {
-            this.requestPromises.set(cacheKey, requestPromise);
+        if (useCache) {
+            this.requestPromises.set(promiseCacheKey, requestPromise);
         }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
 
         const response = await requestPromise.catch((error) => {
-            if (cacheKey) {
-                this.requestPromises.delete(cacheKey);
+            if (useCache) {
+                this.requestPromises.delete(promiseCacheKey);
             }
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
             throw error;
         });
 
-        if (cacheKey) {
-            this.requestPromises.delete(cacheKey);
+        if (useCache) {
+            this.requestPromises.delete(promiseCacheKey);
         }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
@@ -406,10 +409,12 @@ export class HttpService {
                     }
                 });
 
-            CacheService.getInstance().set(backendToken, response.data['User'], cacheType);
+            const user = response.data['User'];
+            CacheService.getInstance().set(backendToken, user, cacheType);
             HTTPRequestLogger.getInstance().stop(profileTaskId, response);
             this.requestPromises.delete(requestKey);
-            resolve(response.data['User']);
+            this.setUserRoleIds(user);
+            resolve(user);
         });
 
         this.requestPromises.set(requestKey, requestPromise);

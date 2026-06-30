@@ -28,6 +28,8 @@ export class AgentPortalService {
 
         await this.checkAuthentication();
 
+        ClientStorageService.checkLocalStorage();
+
         await ContextService.getInstance().initialize();
         PortalNotificationService.getInstance();
         ContextHistory.getInstance();

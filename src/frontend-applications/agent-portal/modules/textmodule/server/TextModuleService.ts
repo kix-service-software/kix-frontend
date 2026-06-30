@@ -67,10 +67,7 @@ export class TextModuleAPIService extends KIXObjectAPIService {
     ): Promise<string | number> {
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.TEXT_MODULE, 'TextModuleID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }
@@ -83,10 +80,7 @@ export class TextModuleAPIService extends KIXObjectAPIService {
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.TEXT_MODULE, 'TextModuleID'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         return id;
     }

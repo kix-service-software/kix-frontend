@@ -319,10 +319,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             const uri = this.buildUri('cmdb', 'configitems');
             const response = await this.sendCreateRequest<CreateConfigItemResponse, CreateConfigItemRequest>(
                 token, clientRequestId, uri, new CreateConfigItemRequest(createConfigItem), this.objectType
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
 
             const configItemId = response.ConfigItemID;
 

@@ -7,14 +7,15 @@
  * --
  */
 
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { APIUtil } from '../api/APIUtil';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 
-function routeConfiguration(fastify: FastifyInstance): any {
+function routeConfiguration(fastify: FastifyInstance, opts: RouteShorthandOptions = {}): any {
     const authMethod = (fastify as any).authenticate;
-    return { onRequest: [authMethod] };
+    opts.onRequest = [authMethod];
+    return opts;
 }
 
 // eslint-disable-next-line max-lines-per-function

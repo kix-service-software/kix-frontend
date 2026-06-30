@@ -43,7 +43,8 @@ export default routes;
 async function login(req: FastifyRequest, reply: FastifyReply): Promise<void> {
     const ssoSuccess = await doSSOLogin(
         req, reply, ConfigurationService.isEnvSetTrue('SSO_ENABLED'),
-        ConfigurationService.getEnvString('BASE_ROUTE'), UserType.AGENT
+        ConfigurationService.getEnvString('BASE_ROUTE'), UserType.AGENT,
+        'agent-portal'
     );
     if (!ssoSuccess) {
         return routeToLoginPage(req, reply);

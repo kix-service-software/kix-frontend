@@ -27,6 +27,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { ValidIDProperty } from '../../../base-components/webapp/core/ValidIDProperty';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -224,8 +225,10 @@ export class OrganisationService extends KIXObjectService<Organisation> {
                         org.SubOrganisations, showInvalid, invalidClickable, filterIds
                     );
 
+                    const label = await LabelService.getInstance().getObjectText(org);
+
                     const treeNode = new TreeNode(
-                        org.ID, org.Name,
+                        org.ID, label,
                         new ObjectIcon(null, KIXObjectType.ORGANISATION, org.ID),
                         null,
                         subTree,

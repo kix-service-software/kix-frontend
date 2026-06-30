@@ -29,7 +29,6 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { ApplicationEvent } from './ApplicationEvent';
-import { KIXModulesService } from './KIXModulesService';
 import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { ClientStorageService } from './ClientStorageService';
@@ -823,10 +822,10 @@ export class ContextService {
     }
 
     public isBrowserTabActive(): boolean {
-        return this.contextRefreshInterval.isBrowserTabActive;
+        return this.contextRefreshInterval?.isBrowserTabActive;
     }
 
     public getAutoRefreshTime(): number {
-        return this.contextRefreshInterval.autoRefreshTime;
+        return this.contextRefreshInterval?.autoRefreshTime;
     }
 }

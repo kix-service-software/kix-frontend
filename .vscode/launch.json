@@ -122,15 +122,16 @@
             "name": "KIX Tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
+                "./node_modules/.bin/mocha",
                 "--no-timeouts",
                 "--reporter",
                 "spec",
-                "--require",
-                "ts-node/register",
-                "--require",
-                "source-map-support/register",
+                "--require source-map-support/register",
+                " --full-trace",
+                "--no-experimental-strip-types",
                 "--exit",
-                "src/frontend-applications/agent-portal/server/tests/api/**/*.test.ts"
+                "src/**/*.test.ts",
+                "tests/**/*.test.ts"
             ],
             "env": {
                 "NODE_ENV": "test",

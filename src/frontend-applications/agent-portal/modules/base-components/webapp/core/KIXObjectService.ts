@@ -122,6 +122,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 silent, collectionId
             ).catch((error: Error) => {
                 if (!silent && error?.Code !== 'SILENT') {
+                    if (error?.StatusCode === 401) {
+                        window.location.replace('/auth');
+                        return;
+                    }
                     // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
@@ -1110,6 +1114,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+            if (!dynamicField) {
+                return;
+            }
+
             for (const extendedService of this.extendedServices) {
                 const extendedSupport = extendedService.getBackendFilterTypeForDF(dynamicField, dep);
                 if (typeof extendedSupport !== 'undefined' && extendedSupport !== null) {
@@ -1117,7 +1125,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 }
             }
 
-            switch (dynamicField.FieldType) {
+            switch (dynamicField?.FieldType) {
                 case DynamicFieldTypes.SELECTION:
                     return BackendSearchDataType.NUMERIC;
                 case DynamicFieldTypes.CI_REFERENCE:
@@ -1195,13 +1203,18 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async isBackendFilterSupportedForDF(dfName: string, allowDates: boolean = false): Promise<boolean> {
         const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+        if (!dynamicField) {
+            return false;
+        }
+
         for (const extendedService of this.extendedServices) {
             const extendedSupport = extendedService.isBackendFilterSupportedForDF(dynamicField);
             if (typeof extendedSupport !== 'undefined' && extendedSupport !== null) {
                 return extendedSupport;
             }
         }
-        switch (dynamicField.FieldType) {
+
+        switch (dynamicField?.FieldType) {
             case DynamicFieldTypes.DATE:
             case DynamicFieldTypes.DATE_TIME:
                 return allowDates;

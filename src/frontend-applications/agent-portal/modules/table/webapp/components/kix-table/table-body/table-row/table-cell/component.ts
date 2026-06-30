@@ -39,7 +39,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        await this.cell.getValue().initDisplayValue(this.cell);
+        if (this.cell) {
+            await this.cell.getValue().initDisplayValue(this.cell);
+        }
 
         this.initCellComponent();
 

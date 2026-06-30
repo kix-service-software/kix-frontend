@@ -12,6 +12,7 @@ import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { UserPreference } from './UserPreference';
 import { Contact } from '../../customer/model/Contact';
 import { OutOfOffice } from './OutOfOffice';
+import { PersonalSettingsProperty } from './PersonalSettingsProperty';
 
 export class User extends KIXObject {
 
@@ -70,6 +71,14 @@ export class User extends KIXObject {
         } else {
             return this.UserLogin;
         }
+    }
+
+    public getMyQueueIds(): number[] {
+        const myQueues = this.Preferences?.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
+        const myQueueValue = Array.isArray(myQueues?.Value)
+            ? myQueues?.Value
+            : isNaN(Number(myQueues?.Value)) ? [] : [myQueues?.Value];
+        return myQueueValue?.map((q) => Number(q)) || [];
     }
 
 }

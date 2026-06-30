@@ -212,10 +212,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 KIXObjectType.OBJECT_TAG
             );
 
-            await tagService.deleteObject(token, clientRequestId, objectType, objectId, KIXObjectType.OBJECT_TAG_LINK)
-                .catch((error: Error) => {
-                    throw new Error(error.Code, error.Message);
-                });
+            await tagService.deleteObject(token, clientRequestId, objectType, objectId, KIXObjectType.OBJECT_TAG_LINK);
 
             if (tags && tags.length) {
                 for (const tag of tags) {
@@ -224,9 +221,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                         ['ObjectID', objectId.toString()],
                         ['ObjectType', objectType]
                     ], null, KIXObjectType.OBJECT_TAG
-                    ).catch((error: Error) => {
-                        throw new Error(error.Code, error.Message);
-                    });
+                    );
                 }
             }
             CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_TAG);
@@ -383,11 +378,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     ): Promise<Error[]> {
         const uri = [this.buildUri(ressourceUri, objectId)];
 
-        const errors = await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix)
-            .catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+        const errors = await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix);
 
         if (errors && errors.length) {
             LoggingService.getInstance().error(`${errors[0].Code}: ${errors[0].Message}`, errors[0]);
@@ -433,10 +424,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
                 await this.sendCreateRequest(
                     token, clientRequestId, 'links', new CreateLinkRequest(link), KIXObjectType.LINK
-                ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
+                );
             }
         }
     }
@@ -453,9 +441,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                     ['ContentType', icon.ContentType],
                     ['Content', icon.Content]
                 ], null, KIXObjectType.OBJECT_ICON
-                ).catch((error: Error) => {
-                    throw new Error(error.Code, error.Message);
-                });
+                );
             }
             CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_ICON);
         }
@@ -483,9 +469,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                     ['Content', icon.Content]
                 ],
                     icons[0].ID, null, KIXObjectType.OBJECT_ICON
-                ).catch((error: Error) => {
-                    throw new Error(error.Code, error.Message);
-                });
+                );
             } else {
                 this.createIcon(token, clientRequestId, icon)
                     .catch((error) => {

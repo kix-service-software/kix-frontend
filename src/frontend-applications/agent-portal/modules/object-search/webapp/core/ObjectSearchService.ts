@@ -18,6 +18,8 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { ObjectSearch } from '../../model/ObjectSearch';
+import { ObjectSearchLoadingOptions } from '../../model/ObjectSearchLoadingOptions';
+import { ObjectSearchRepository } from './ObjectSearchRepository';
 
 export class ObjectSearchService extends KIXObjectService {
 
@@ -61,24 +63,21 @@ export class ObjectSearchService extends KIXObjectService {
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
-        objectLoadingOptions?: KIXObjectSpecificLoadingOptions, cache?: boolean, forceIds?: boolean,
+        objectLoadingOptions?: ObjectSearchLoadingOptions, cache?: boolean, forceIds?: boolean,
         silent?: boolean, collectionId?: string
     ): Promise<O[]> {
 
-        const key = objectType + '-' + JSON.stringify(objectLoadingOptions);
-
-        let result;
-        const cachedValue = ClientStorageService.getOption(key);
-        if (cachedValue) {
-            result = cachedValue ? JSON.parse(cachedValue) : null;
-        } else {
-            result = await super.loadObjects<O>(
+        let result = await ObjectSearchRepository.getInstance().getObjectSearches(
+            objectLoadingOptions.objectType
+        );
+        if (!result?.length) {
+            result = await super.loadObjects<ObjectSearch>(
                 objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
             );
-            ClientStorageService.setOption(key, JSON.stringify(result));
+            ObjectSearchRepository.getInstance().putObjectSearches(result);
         }
 
-        return result;
+        return result as any;
 
     }
 

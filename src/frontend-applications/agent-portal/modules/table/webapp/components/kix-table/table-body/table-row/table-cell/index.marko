@@ -6,39 +6,42 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<td
-    class=["content-cell", state.stateClasses]
-    style=(
-        typeof input.level === "number"
-            ? `padding-left: ${input.level + 0.5}rem`
-            : ""
-    )>
-    <if(state.noLink)>
-        <if(!state.loading)>
-            <if(state.showDefaultCell)>
-                <default-cell-content cell=input.cell/>
-            </if>
-            <else>
-                <${component.getCellTemplate()} cell=input.cell/>
-            </else>
-        </if>
-    </if>
-    <else>
-        <link-target
-            object=state.object
-            routingConfiguration=state.routingConfiguration
-            objectId=state.objectId>
-            <@content>
-                <if(!state.loading)>
-                    <if(state.showDefaultCell)>
-                        <default-cell-content cell=input.cell/>
-                    </if>
-                    <else>
-                        <${component.getCellTemplate()} cell=input.cell/>
-                    </else>
+<if(input.cell)>
+    <td
+        class=["content-cell", state.stateClasses]
+        style=(
+            typeof input.level === "number"
+                ? `padding-left: ${input.level + 0.5}rem`
+                : ""
+        )
+    >
+        <if(state.noLink)>
+            <if(!state.loading)>
+                <if(state.showDefaultCell)>
+                    <default-cell-content cell=input.cell/>
                 </if>
-            </@content>
-        </link-target>
-    </else>
-</td>
+                <else>
+                    <${component.getCellTemplate()} cell=input.cell/>
+                </else>
+            </if>
+        </if>
+        <else>
+            <link-target
+                object=state.object
+                routingConfiguration=state.routingConfiguration
+                objectId=state.objectId
+            >
+                <@content>
+                    <if(!state.loading)>
+                        <if(state.showDefaultCell)>
+                            <default-cell-content cell=input.cell/>
+                        </if>
+                        <else>
+                            <${component.getCellTemplate()} cell=input.cell/>
+                        </else>
+                    </if>
+                </@content>
+            </link-target>
+        </else>
+    </td>
+</if>

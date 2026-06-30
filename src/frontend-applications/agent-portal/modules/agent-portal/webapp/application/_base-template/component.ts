@@ -12,7 +12,6 @@
 import { ComponentState } from './ComponentState';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { RoutingService } from '../../../../../modules/base-components/webapp/core/RoutingService';
-import { SessionAPIClient } from '../../../../../api-client/session/Session';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
@@ -24,6 +23,7 @@ import { Context } from 'mocha';
 import { MobileShowEvent } from '../../../model/MobileShowEvent';
 import { MobileShowEventData } from '../../../model/MobileShowEventData';
 import { KIXStyle } from '../../../../base-components/model/KIXStyle';
+import { TranslationRepository } from '../../../../translation/webapp/core/TranslationRepository';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -43,6 +43,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         console.groupCollapsed('Mount Base Template');
         await super.onMount();
         const start = Date.now();
+
+        await TranslationRepository.getInstance().initDatabase();
 
         this.state.loading = true;
         this.state.loadingHint = 'Loading';
@@ -66,14 +68,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         super.onDestroy();
     }
 
-    private async checkAuthentication(): Promise<void> {
-        if (!SessionAPIClient.validateToken()) {
-            window.location.replace('/auth');
-        }
-
-        const currentUser = await SessionAPIClient.getCurrentUser();
-        ClientStorageService.setOption('UserId', currentUser?.UserID?.toString());
-    }
     private registerListener(): void {
         super.registerEventSubscriber(
             function (data: any, eventId: string): void {
@@ -99,14 +93,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             contextRegistered: () => { return; },
             beforeDestroy: () => null
         });
-
-        super.registerEventSubscriber(
-            function (data: any, eventId: string): void {
-                this.state.loading = data.loading;
-                this.state.loadingHint = data.hint;
-            },
-            [ApplicationEvent.APP_LOADING]
-        );
 
         super.registerEventSubscriber(
             function (data: any, eventId: string): void {

@@ -12,6 +12,7 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ObjectSearchRepository } from './ObjectSearchRepository';
 
 export class UIModule implements IUIModule {
 
@@ -22,6 +23,8 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(ObjectSearchService.getInstance());
         BrowserCacheService.getInstance().addDependencies(KIXObjectType.DYNAMIC_FIELD, [KIXObjectType.OBJECT_SEARCH]);
+
+        await ObjectSearchRepository.getInstance().initDatabase();
     }
 
     public async registerExtensions(): Promise<void> {

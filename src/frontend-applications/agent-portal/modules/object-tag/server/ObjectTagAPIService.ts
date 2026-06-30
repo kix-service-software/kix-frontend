@@ -118,10 +118,7 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
         const uri = this.buildUri(this.RESOURCE_URI);
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, objectType, 'ObjectTagID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
         return id;
     }
 
@@ -159,11 +156,7 @@ export class ObjectTagAPIService extends KIXObjectAPIService {
         if (objectResponse?.objects?.length) {
             for (const tag of objectResponse.objects) {
                 const uri = [this.buildUri(this.RESOURCE_URI, tag.ID)];
-                const errors = await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix)
-                    .catch((error: Error) => {
-                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                        throw new Error(error.Code, error.Message);
-                    });
+                const errors = await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix);
 
                 if (errors && errors.length) {
                     LoggingService.getInstance().error(`${errors[0].Code}: ${errors[0].Message}`, errors[0]);

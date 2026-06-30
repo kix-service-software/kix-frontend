@@ -106,10 +106,7 @@ export class ObjectIconService extends KIXObjectAPIService {
         const createObjectIcon = new CreateObjectIcon(parameter);
         const response = await this.sendCreateRequest<CreateObjectIconResponse, CreateObjectIconRequest>(
             token, clientRequestId, this.RESOURCE_URI, new CreateObjectIconRequest(createObjectIcon), this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         await this.commitObjectTag(
             token, clientRequestId, parameter, objectType, response.ObjectIconID
@@ -127,10 +124,7 @@ export class ObjectIconService extends KIXObjectAPIService {
         const response = await this.sendUpdateRequest<UpdateObjectIconResponse, UpdateObjectIconRequest>(
             token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
             new UpdateObjectIconRequest(updateObjectIcon), this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        );
 
         await this.commitObjectTag(
             token, clientRequestId, parameter, objectType, response.ObjectIconID

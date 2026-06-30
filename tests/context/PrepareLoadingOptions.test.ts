@@ -22,6 +22,7 @@ import { LabelService } from '../../src/frontend-applications/agent-portal/modul
 import { TicketLabelProvider } from '../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
 import { PlaceholderService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/PlaceholderService';
 import { TicketPlaceholderHandler } from '../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
+import { DynamicFieldValue } from '../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldValue';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -93,6 +94,75 @@ describe('PrepareLoadingOptions', () => {
             }
         });
 
+    });
+
+    describe('Prepare loading options with _ObjectValue (Array) placeholder', () => {
+
+        describe('Filter value is an array and contains _ObjectValue placholder', () => {
+            const ticket = new Ticket();
+            const dfValue = new DynamicFieldValue();
+            dfValue.Name = 'ChildTickets';
+            dfValue.Value = ['a', 'b', 'c'];
+            ticket.DynamicFields = [dfValue]
+
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.filter = [
+                new FilterCriteria(
+                    TicketProperty.TICKET_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND,
+                    [
+                        '1',
+                        '2',
+                        '<KIX_TICKET_DynamicField_ChildTickets_ObjectValue>',
+                        '3',
+                        '4'
+                    ]
+                )
+            ];
+
+            it('should replace the placeholder and integrate the array into the filter value', async () => {
+                const preparedOptions = await LoadingOptionsUtil.prepareLoadingOptions(ticket, loadingOptions, '');
+                expect(preparedOptions.filter?.length).equals(1);
+                expect(preparedOptions.filter?.[0].value).an('array');
+                if (Array.isArray(preparedOptions.filter?.[0].value)) {
+                    expect(preparedOptions.filter?.[0].value?.length).equals(7);
+                    expect(preparedOptions.filter?.[0].value[0]).equals('1');
+                    expect(preparedOptions.filter?.[0].value[1]).equals('2');
+                    expect(preparedOptions.filter?.[0].value[2]).equals('a');
+                    expect(preparedOptions.filter?.[0].value[3]).equals('b');
+                    expect(preparedOptions.filter?.[0].value[4]).equals('c');
+                    expect(preparedOptions.filter?.[0].value[5]).equals('3');
+                    expect(preparedOptions.filter?.[0].value[6]).equals('4');
+                }
+            });
+        });
+
+        describe('Filter value is an single value with _ObjectValue placholder', () => {
+            const ticket = new Ticket();
+            const dfValue = new DynamicFieldValue();
+            dfValue.Name = 'ChildTickets';
+            dfValue.Value = ['a', 'b', 'c'];
+            ticket.DynamicFields = [dfValue]
+
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.filter = [
+                new FilterCriteria(
+                    TicketProperty.TICKET_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND,
+                    '<KIX_TICKET_DynamicField_ChildTickets_ObjectValue>',
+                )
+            ];
+
+            it('should replace the placeholder set the array as filter value', async () => {
+                const preparedOptions = await LoadingOptionsUtil.prepareLoadingOptions(ticket, loadingOptions, '');
+                expect(preparedOptions.filter?.length).equals(1);
+                expect(preparedOptions.filter?.[0].value).an('array');
+                if (Array.isArray(preparedOptions.filter?.[0].value)) {
+                    expect(preparedOptions.filter?.[0].value?.length).equals(3);
+                    expect(preparedOptions.filter?.[0].value[0]).equals('a');
+                    expect(preparedOptions.filter?.[0].value[1]).equals('b');
+                    expect(preparedOptions.filter?.[0].value[2]).equals('c');
+                }
+            });
+        });
     });
 
 });

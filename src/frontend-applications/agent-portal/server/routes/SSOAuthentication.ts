@@ -15,7 +15,8 @@ import { APIUtil } from '../api/APIUtil';
 
 // eslint-disable-next-line max-lines-per-function
 export async function doSSOLogin(
-    req: FastifyRequest, reply: FastifyReply, ssoEnabled: boolean, baseRoute: string, userType: UserType
+    req: FastifyRequest, reply: FastifyReply, ssoEnabled: boolean,
+    baseRoute: string, userType: UserType, application: string
 ): Promise<boolean> {
     let authType = '';
     let negotiationToken = '';
@@ -65,10 +66,9 @@ export async function doSSOLogin(
             return false;
         }
 
-        const { application } = APIUtil.getRequestData(req);
         AuthenticationService.setSessionCookie(req, application, token);
-        const url = req.query['redirectUrl']?.toString();
-        const redirectUrl = decodeURIComponent(url) || '/';
+        const url = APIUtil.getQueryValue(req, 'redirectUrl');
+        const redirectUrl = url ? decodeURIComponent(url) : '/';
         reply.redirect(`${baseRoute}${redirectUrl}`);
         return true;
     }

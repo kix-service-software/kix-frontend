@@ -119,20 +119,14 @@ export class SysConfigService extends KIXObjectAPIService {
             const uri = this.buildUri(this.RESOURCE_URI, objectId);
             const id = await super.executeUpdateOrCreateRequest<string>(
                 token, clientRequestId, parameter, uri, KIXObjectType.SYS_CONFIG_OPTION, 'Option'
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
             ModuleConfigurationService.getInstance().sysconfigChanged(id);
             return id;
         } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'definitions', objectId);
             const id = await super.executeUpdateOrCreateRequest<string>(
                 token, clientRequestId, parameter, uri, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, 'Option'
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
             ModuleConfigurationService.getInstance().sysconfigChanged(id);
             return id;
         }
@@ -147,10 +141,7 @@ export class SysConfigService extends KIXObjectAPIService {
             const id = await super.executeUpdateOrCreateRequest<string>(
                 token, clientRequestId, parameter, uri, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
                 'Option', true
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            );
             ModuleConfigurationService.getInstance().sysconfigChanged(id);
             return id;
         } else {
@@ -164,8 +155,7 @@ export class SysConfigService extends KIXObjectAPIService {
     ): Promise<void> {
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uris = objectIds.map((id) => this.buildUri(this.RESOURCE_URI, 'definitions', id));
-            const errors: Error[] = await this.sendDeleteRequest(token, clientRequestId, uris, objectType, logError)
-                .catch((error) => { throw new Error(error.Code, error.Message); });
+            const errors: Error[] = await this.sendDeleteRequest(token, clientRequestId, uris, objectType, logError);
             errors.forEach((e) => LoggingService.getInstance().error(`${e.Code}: ${e.Message}`, e));
         }
     }

@@ -61,7 +61,11 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
                 displayValue = translation.Value;
                 break;
             case TranslationPatternProperty.AVAILABLE_LANGUAGES:
-                displayValue = translation.AvailableLanguages.map((l) => l).join(', ');
+                if (Array.isArray(translation.AvailableLanguages)) {
+                    displayValue = translation.AvailableLanguages.map((l) => l).join(', ');
+                } else if (typeof translation.AvailableLanguages === 'string') {
+                    displayValue = translation.AvailableLanguages;
+                }
                 break;
             default:
                 displayValue = await super.getDisplayText(translation, property, value, translatable);
