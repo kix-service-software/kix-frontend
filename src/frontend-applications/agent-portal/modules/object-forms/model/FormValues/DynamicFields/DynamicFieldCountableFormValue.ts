@@ -89,6 +89,12 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     public async reInitFormValue(): Promise<void> {
         this.defaultValue = this.dfValues.map((dfValue) => dfValue.Value);
         await this.initFormValue();
+        if (this.objectValueMapper?.objectFormHandler?.configurationMode) {
+            await this.postInitFormValue();
+            for (const fv of this.formValues) {
+                await fv.postInitFormValue();
+            }
+        }
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {

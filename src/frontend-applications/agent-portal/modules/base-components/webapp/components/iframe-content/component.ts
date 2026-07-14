@@ -66,7 +66,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             frame.addEventListener('load', (ev) => {
                 let frameDocument: Document;
-                console.log(ev);
                 try {
                     frameDocument = frame.contentWindow.document;
                 } catch (e) {
