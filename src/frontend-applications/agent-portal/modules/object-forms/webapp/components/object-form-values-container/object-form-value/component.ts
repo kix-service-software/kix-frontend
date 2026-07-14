@@ -116,8 +116,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const formHandler = await this.context.getFormManager()?.getObjectFormHandler();
         this.field = formHandler.getFormField(this.state.formValue?.fieldId);
-        this.state.showVisibilityBadge = this.field ? this.field.options?.find(
-            (option) => option.option === 'set hidden')?.value : !this.state.visible;
+        let hiddenOption = this.field?.options?.find((o) => o.option.startsWith('set hidden'));
+        if (this.state.formValue?.isControlledByParent) {
+            hiddenOption = this.state.formValue?.parent?.formField?.options?.find(
+                (o) => o.option.startsWith('set hidden')
+            );
+        }
+        this.state.showVisibilityBadge = hiddenOption?.value || !this.state.visible;
+
         this.state.configReadOnly = this.field ?
             this.field.readonly :
             this.state.formValue?.isControlledByParent ?
@@ -244,14 +250,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const configObject = new FormConfigurationObject();
         configObject.configurationType = ConfigurationType.FormField;
 
-        if (this.state.formValue.fieldId) {
+        if (this.state.formValue?.fieldId) {
             configObject.fieldId = this.state.formValue.fieldId;
             EventService.getInstance().publish(ObjectFormEvent.EDIT_FIELD, configObject);
         } else {
-            if ((this.state.formValue.parent as DynamicFieldCountableFormValue)?.COUNT_CONTAINER) {
+            if ((this.state.formValue?.parent as DynamicFieldCountableFormValue)?.COUNT_CONTAINER) {
                 configObject.fieldId = this.state.formValue.parent.fieldId;
             }
-            configObject.fieldProperty = this.state.formValue.property;
+            configObject.fieldProperty = this.state.formValue?.property;
 
             const formHandler = await this.context?.getFormManager().getObjectFormHandler();
 

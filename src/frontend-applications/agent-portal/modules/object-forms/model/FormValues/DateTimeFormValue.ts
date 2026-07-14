@@ -63,4 +63,18 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
 
         await super.setFormValue(value);
     }
+
+    public async postInitFormValue(): Promise<void> {
+        if (
+            this.objectValueMapper?.objectFormHandler?.configurationMode &&
+            this.value &&
+            (
+                // clear if value does not match field type
+                (this.isRelativeTimeValue && this.value.match(/-/)) ||
+                (!this.isRelativeTimeValue && !this.value.match(/-/))
+            )
+        ) {
+            this.value = null;
+        }
+    }
 }

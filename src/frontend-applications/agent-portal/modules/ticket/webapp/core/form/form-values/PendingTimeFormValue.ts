@@ -59,7 +59,7 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         this.initDefaultValue().then(() => this.enabled = true);
     }
 
-    private async initDefaultValue(): Promise<void> {
+    protected async initDefaultValue(): Promise<void> {
         // this.defaultValue contains the origin value of the FormFieldConfiguration
         // it's needed to calculate the right pending time
         TicketService.getPendingDateDiff(this.defaultValue || this.value)

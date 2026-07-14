@@ -302,9 +302,12 @@ export class DateTimeUtil {
         return value;
     }
 
-    public static calculateDate(value: number, unit: string): string {
-        const date = new Date();
+    public static calculateDate(value: number, unit: string, orgDate?: Date): string {
+        const date = orgDate ? new Date(orgDate) : new Date();
         switch (unit) {
+            case 's':
+                date.setSeconds(date.getSeconds() + value);
+                break;
             case 'm':
                 date.setMinutes(date.getMinutes() + value);
                 break;
