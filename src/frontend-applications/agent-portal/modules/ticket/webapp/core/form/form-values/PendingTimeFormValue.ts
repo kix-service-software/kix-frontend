@@ -29,8 +29,8 @@ export class PendingTimeFormValue extends DateTimeFormValue {
     }
 
     public async initFormValue(): Promise<void> {
+        await this.enableIfPending();
         await super.initFormValue();
-        this.enableIfPending();
     }
 
     private async enableIfPending(): Promise<void> {
@@ -38,16 +38,11 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         const isStateEnabled = this.parent?.enabled;
 
         if (isStateEnabled && isPending) {
-            if (this.enabled) {
-                this.visible = true;
-            } else {
-                this.enable();
+            if (!this.enabled) {
+                await this.enable();
             }
+            this.visible = true;
         }
-    }
-
-    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        return super.initFormValueByField(field);
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
@@ -55,14 +50,10 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         await super.setFormValue(value, force);
     }
 
-    public async enable(): Promise<void> {
-        this.initDefaultValue().then(() => this.enabled = true);
-    }
-
     protected async initDefaultValue(): Promise<void> {
         // this.defaultValue contains the origin value of the FormFieldConfiguration
         // it's needed to calculate the right pending time
-        TicketService.getPendingDateDiff(this.defaultValue || this.value)
+        await TicketService.getPendingDateDiff(this.defaultValue || this.value)
             .then((pendingDate) => {
                 this.value = DateTimeUtil.getKIXDateTimeString(pendingDate);
                 this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
@@ -70,13 +61,13 @@ export class PendingTimeFormValue extends DateTimeFormValue {
     }
 
     public async postInitFormValue(): Promise<void> {
-
         this.initDefaultValue().then(() => this.setFormValue(this.value));
 
         this.object.addBinding(TicketProperty.STATE_ID, async (value: number) => {
             const isPending = await TicketService.isPendingState(value);
             if (isPending) {
                 await this.enable();
+                await this.initDefaultValue();
             } else {
                 await this.disable();
             }
