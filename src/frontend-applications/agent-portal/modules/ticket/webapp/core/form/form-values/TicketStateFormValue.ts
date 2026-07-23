@@ -45,7 +45,8 @@ export class TicketStateFormValue extends SelectObjectFormValue {
         this.setNewInitialState('forbiddenValues', [6, 7]);
         await super.initFormValue();
 
-        this.formValues?.[0].initFormValue();
+        // wait for init of pending value, before postInit is started
+        await this.formValues?.[0].initFormValue();
     }
 
     public async postInitFormValue(): Promise<void> {

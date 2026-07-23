@@ -22,6 +22,7 @@ import { Article } from '../model/Article';
 import { ArticleLoadingOptions } from '../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../model/ArticleProperty';
 import { TicketAPIService } from './TicketService';
+import juice from 'juice';
 
 export class ArticleViewUtil {
 
@@ -49,12 +50,9 @@ export class ArticleViewUtil {
 
             if (article.bodyAttachment) {
                 content = await this.getHTMLContent(
-                    token, ticketId, article, reduceContent, linesCount, prepareInline, relevantOrganisationID
+                    token, ticketId, article, reduceContent, resolveInlineCSS,
+                    linesCount, prepareInline, relevantOrganisationID
                 );
-
-                if (resolveInlineCSS) {
-                    content = await this.replaceInlineStyle(content);
-                }
             } else {
                 isPlainText = true;
                 content = article.Body
@@ -81,7 +79,7 @@ export class ArticleViewUtil {
     }
 
     private static async getHTMLContent(
-        token: string, ticketId: number, article: Article, reduceContent: boolean,
+        token: string, ticketId: number, article: Article, reduceContent: boolean, resolveInlineCSS: boolean,
         linesCount?: number, prepareInline: boolean = true, relevantOrganisationID?: number
     ): Promise<string> {
 
@@ -98,6 +96,9 @@ export class ArticleViewUtil {
 
         const contentAttachment = attachments.find((a) => a.ID === article.bodyAttachment.ID);
         let content = this.getContent(contentAttachment);
+        if (resolveInlineCSS) {
+            content = await this.replaceInlineStyle(content);
+        }
 
         if (reduceContent) {
             content = await this.reduceContent(content, linesCount);
@@ -178,7 +179,6 @@ export class ArticleViewUtil {
         }
 
         if (!isNaN(linesCount) && linesCount > 0) {
-
             // cut pre body html (only reduce "visible" content)
             let preBodyHTML = '';
             const closingHeadIndex = result.indexOf('</head>');
@@ -250,7 +250,6 @@ export class ArticleViewUtil {
     public static async replaceInlineStyle(content: string, create: boolean = false): Promise<string> {
         let error = '';
         try {
-            const juice = require('juice');
             content = juice(content);
         } catch (e) {
             LoggingService.getInstance().error('Error resolving inline css.', e);
@@ -258,9 +257,16 @@ export class ArticleViewUtil {
             error = 'Possible invalid HTML/CSS in source mail.';
         }
 
-        const bodyMatch = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
-        if (bodyMatch && bodyMatch.length >= 3) {
-            content = bodyMatch[2];
+        const openingBodyIndexStart = content.indexOf('<body');
+        if (openingBodyIndexStart !== -1) {
+            const openingBodyIndexEnd = content.indexOf('>', openingBodyIndexStart);
+            const closingBodyIndex = content.indexOf('</body>');
+            if (
+                openingBodyIndexEnd !== -1
+                && closingBodyIndex !== -1
+            ) {
+                content = content.slice(openingBodyIndexEnd + 1, closingBodyIndex);
+            }
         }
 
         if (error && !create) {

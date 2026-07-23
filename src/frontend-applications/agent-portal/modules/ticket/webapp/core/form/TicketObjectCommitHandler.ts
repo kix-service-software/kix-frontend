@@ -111,7 +111,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     public async prepareArticle(
         ticket: Ticket, article: Article, forCommit: boolean, orgTicketQueueID: number, forStorage?: boolean
     ): Promise<void> {
-        this.deleteArticleProperties(article);
+        this.deleteArticleProperties(article, forCommit);
         this.deleteCommonProperties(article, true);
 
         this.prepareDynamicFields(article, forCommit);
@@ -135,11 +135,11 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         this.prepareRecipients(article);
     }
 
-    private deleteArticleProperties(article: Article): void {
+    private deleteArticleProperties(article: Article, forCommit: boolean): void {
         const context = ContextService.getInstance().getActiveContext();
         const isNewArticleContext = context?.getAdditionalInformation('NEW_ARTICLE');
-        const referencedArticleId = context?.getAdditionalInformation('ReferencedArticleID');
-        if (isNewArticleContext && referencedArticleId === article.ArticleID) {
+        const referencedArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+        if (isNewArticleContext && referencedArticleId === article.ArticleID && forCommit) {
             delete article.ArticleID;
         }
         delete article.ticket;
