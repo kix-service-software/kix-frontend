@@ -41,10 +41,10 @@ async function routes(fastify: FastifyInstance, options): Promise<void> {
 export default routes;
 
 async function login(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const baseRoute = ConfigurationService.getEnvString('BASE_ROUTE') || '';
     const ssoSuccess = await doSSOLogin(
         req, reply, ConfigurationService.isEnvSetTrue('SSO_ENABLED'),
-        ConfigurationService.getEnvString('BASE_ROUTE'), UserType.AGENT,
-        'agent-portal'
+        baseRoute, UserType.AGENT, 'agent-portal'
     );
     if (!ssoSuccess) {
         return routeToLoginPage(req, reply);
