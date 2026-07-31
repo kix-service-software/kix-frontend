@@ -40,6 +40,7 @@ import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
 import { ContactDetailsContext } from './webapp/core/context/ContactDetailsContext';
 import { ConfigItemTableFactory } from '../cmdb/webapp/core';
+import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -47,6 +48,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         return ContactDetailsContext.CONTEXT_ID;
     }
 
+    // eslint-disable-next-line max-lines-per-function
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations: IConfiguration[] = [];
 
@@ -441,28 +443,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(assignedOrganisationsLane);
 
-        const assetTableConfiguration = new TableConfiguration(
-            null, null, ConfigurationType.Table,
-            KIXObjectType.CONFIG_ITEM, null, null, null, null, null, null, null, null,
-            TableHeaderHeight.SMALL, TableRowHeight.SMALL
-        );
-
-        assetTableConfiguration.tableColumns = [
-            ...ConfigItemTableFactory.getDefaultColumns(),
-            new DefaultColumnConfiguration(
-                'organisation-details-assigned-contacts-new-tickets', 'New Ticket', ConfigurationType.TableColumn,
-                ContactProperty.CREATE_NEW_TICKET, true, false, false, true, 150,
-                false, false, false, DataType.STRING, false, 'create-new-ticket-cell'
-            )
-        ];
-
-        const assignedConfigItemsLane = new WidgetConfiguration(
-            'contact-details-assigned-config-items-widget', 'Assigned Assets', ConfigurationType.Widget,
-            'contact-assigned-config-items-widget', 'Translatable#Assigned Assets',
-            [], null, assetTableConfiguration, false, true, null, false
-        );
-        configurations.push(assignedConfigItemsLane);
-
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Contact Details', ConfigurationType.Context,
@@ -475,11 +455,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'contact-details-assigned-organisations-widget',
                         null, [new UIComponentPermission('organisations', [CRUD.READ])]
                     ),
-                    new ConfiguredWidget(
-                        'contact-details-assigned-config-items-widget',
-                        'contact-details-assigned-config-items-widget',
-                        null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
-                    ),
+                    this.getAssignedConfigItemsWidget(),
                     new ConfiguredWidget(
                         'contact-details-assigned-tickets-widget', null,
                         new WidgetConfiguration(
@@ -563,6 +539,42 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {
         return [];
+    }
+
+    private getAssignedConfigItemsWidget(): ConfiguredWidget {
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                ConfigItemProperty.ASSIGNED_CONTACT, SearchOperator.EQUALS,
+                FilterDataType.NUMERIC, FilterType.AND, '<KIX_CONTACT_ID>'
+            )
+        ]);
+
+        const assetTableConfiguration = new TableConfiguration(
+            null, null, ConfigurationType.Table, KIXObjectType.CONFIG_ITEM, loadingOptions,
+            null, null, null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+        );
+
+        const createTicketCell = new DefaultColumnConfiguration(
+            'organisation-details-assigned-contacts-new-tickets', 'New Ticket', ConfigurationType.TableColumn,
+            ContactProperty.CREATE_NEW_TICKET, true, false, false, true, 150,
+            false, false, false, DataType.STRING, false, 'create-new-ticket-cell'
+        );
+
+        assetTableConfiguration.tableColumns = [...ConfigItemTableFactory.getDefaultColumns(), createTicketCell];
+
+        const tableWidgetConfiguration = new TableWidgetConfiguration(
+            'contact-details-assigned-config-items-table-widget', 'Assigned Assets', ConfigurationType.TableWidget,
+            KIXObjectType.CONFIG_ITEM, null, null, assetTableConfiguration
+        );
+
+        const widgetConfiguration = new WidgetConfiguration(
+            'contact-details-assigned-config-items-widget', 'Assigned Assets', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Assigned Assets', [], null, tableWidgetConfiguration, false, true, null, false
+        );
+        return new ConfiguredWidget(
+            'contact-details-assigned-config-items-widget', null, widgetConfiguration,
+            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
+        );
     }
 
 }
