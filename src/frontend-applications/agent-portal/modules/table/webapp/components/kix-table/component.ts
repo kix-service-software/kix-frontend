@@ -203,9 +203,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        maxheight = Number.isFinite(maxheight) && maxheight < maxHeightByDisplayLimit
-            ? maxheight
-            : maxHeightByDisplayLimit;
+        maxheight = displayLimit > 0
+            ? maxHeightByDisplayLimit
+            : Number.isFinite(maxheight) && maxheight < maxHeightByDisplayLimit
+                ? maxheight
+                : maxHeightByDisplayLimit;
 
 
         if (maxheight > 0) {
