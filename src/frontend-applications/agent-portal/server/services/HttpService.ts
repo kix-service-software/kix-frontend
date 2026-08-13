@@ -33,6 +33,9 @@ import { RequestCounter } from '../../../../server/services/RequestCounter';
 import { HTTPResponse } from './HTTPResponse';
 import { IncomingHttpHeaders } from 'http';
 import { HTTPRequestLogger } from '../../../../server/services/HTTPRequestLogger';
+import { Role } from '../../modules/user/model/Role';
+import { KIXObjectServiceRegistry } from './KIXObjectServiceRegistry';
+import { ObjectResponse } from './ObjectResponse';
 
 export class HttpService {
 
@@ -55,10 +58,20 @@ export class HttpService {
         this.axios = require('axios');
     }
 
-    public setUserRoleIds(user: User): void {
+    public async setUserRoleIds(user: User): Promise<void> {
         if (user) {
-            const roleIds = user.RoleIDs?.sort()?.join(';') || '';
-            CacheService.getInstance().set(`USER_ROLE_IDS_${user.UserID}`, roleIds, 'USER_ROLE_IDS');
+            const userRoleIds = user.RoleIDs?.sort();
+            const beToken = ConfigurationService.getBackendAPIToken();
+            const roleService = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.ROLE);
+            const roles = await roleService.loadObjects<Role>(
+                beToken, 'HTTPService', KIXObjectType.ROLE, userRoleIds, null, null
+            ).catch((): ObjectResponse<Role> => new ObjectResponse());
+
+            const agentRoleIds = roles?.objects?.filter((r) => r.UsageContext === 1 || r.UsageContext === 3);
+            const customerRoleIds = roles?.objects?.filter((r) => r.UsageContext === 2 || r.UsageContext === 3);
+
+            CacheService.getInstance().set(`USER_ROLE_IDS_${user.UserID}_Agent`, agentRoleIds, 'USER_ROLE_IDS');
+            CacheService.getInstance().set(`USER_ROLE_IDS_${user.UserID}_Customer`, customerRoleIds, 'USER_ROLE_IDS');
         }
     }
 
@@ -178,8 +191,11 @@ export class HttpService {
             const backendToken = AuthenticationService.getInstance().getBackendToken(token);
             const decodedToken = AuthenticationService.getInstance().decodeToken(backendToken);
             const userId = decodedToken?.UserID;
-            const roleIds = await CacheService.getInstance().get(`USER_ROLE_IDS_${userId}`, 'USER_ROLE_IDS');
-            cacheId = roleIds + decodedToken?.UserType;
+            const userType = decodedToken?.UserType;
+            const roleIds = await CacheService.getInstance().get(
+                `USER_ROLE_IDS_${userId}_${userType}`, 'USER_ROLE_IDS'
+            );
+            cacheId = roleIds + userType;
         }
 
         const cacheKey = cacheId + resource;
@@ -342,8 +358,14 @@ export class HttpService {
         let cacheId = token;
         if (!useToken) {
             const backendToken = AuthenticationService.getInstance().getBackendToken(token);
-            const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
-            cacheId = await CacheService.getInstance().get(`USER_ROLE_IDS_${userId}`, 'USER_ROLE_IDS');
+            const decodedToken = AuthenticationService.getInstance().decodeToken(backendToken);
+            const userId = decodedToken?.UserID;
+            const userType = decodedToken?.UserType;
+                        const roleIds = await CacheService.getInstance().get(
+                            `USER_ROLE_IDS_${userId}_${userType}`, 'USER_ROLE_IDS'
+                        );
+                        cacheId = roleIds + userType;
+
         }
         const ordered = {};
 

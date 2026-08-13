@@ -203,7 +203,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        maxheight = isNaN(maxheight) ? maxHeightByDisplayLimit : Math.max(maxheight, maxHeightByDisplayLimit);
+        maxheight = displayLimit > 0
+            ? maxHeightByDisplayLimit
+            : Number.isFinite(maxheight) && maxheight < maxHeightByDisplayLimit
+                ? maxheight
+                : maxHeightByDisplayLimit;
+
 
         if (maxheight > 0) {
             this.state.tableStyle = `height: auto; max-height: ${maxheight}px;`;

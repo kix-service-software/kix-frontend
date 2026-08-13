@@ -1,7 +1,6 @@
 {
     "dependencies": [
         "require ./components/contact-assigned-organisations-widget",
-        "require ./components/contact-assigned-config-items-widget",
         "require ./components/contact-list-widget",
         "require ./components/create-new-ticket-cell",
         "require ./components/customer-label",
