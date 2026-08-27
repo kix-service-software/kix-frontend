@@ -18,6 +18,7 @@ import { TicketService } from '../../TicketService';
 
 export class PendingTimeFormValue extends DateTimeFormValue {
 
+    private isHiddenByField: boolean;
     public constructor(
         property: string,
         ticket: Ticket,
@@ -26,6 +27,13 @@ export class PendingTimeFormValue extends DateTimeFormValue {
     ) {
         super(property, ticket, objectValueMapper, parent);
         this.label = 'Translatable#Pending time';
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await super.initFormValueByField(field);
+        if (!field.visible) {
+            this.isHiddenByField = true;
+        }
     }
 
     public async initFormValue(): Promise<void> {
@@ -41,7 +49,10 @@ export class PendingTimeFormValue extends DateTimeFormValue {
             if (!this.enabled) {
                 await this.enable();
             }
-            this.visible = true;
+            // only visible if field config allows
+            this.visible = this.isHiddenByField ? false : this.parent?.visible;
+        } else {
+            await this.disable();
         }
     }
 
@@ -68,11 +79,11 @@ export class PendingTimeFormValue extends DateTimeFormValue {
             if (isPending) {
                 await this.enable();
                 await this.initDefaultValue();
+                // only visible if field config allows
+                this.visible = this.isHiddenByField ? false : this.parent?.visible;
             } else {
                 await this.disable();
             }
-
-            this.visible = isPending;
 
             this.setNewInitialState('enabled', this.enabled);
             this.setNewInitialState('visible', this.visible);
