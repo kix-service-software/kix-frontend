@@ -219,4 +219,8 @@ export class AuthenticationService {
         (req as any)[`${application}-session`].set('session', token);
     }
 
+    public static deleteSessionCookie(req: FastifyRequest, application: string): void {
+        (req as any)[`${application}-session`].delete();
+    }
+
 }

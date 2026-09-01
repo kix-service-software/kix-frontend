@@ -45,6 +45,7 @@ async function login(req: FastifyRequest, reply: FastifyReply): Promise<void> {
     } else {
         try {
             const { baseRoute, application } = APIUtil.getRequestData(req);
+            (reply as any).clearCookie('authNoSSO');
             AuthenticationService.setSessionCookie(req, application, token);
             const redirect = loginData.redirectUrl ? loginData.redirectUrl : '/';
             const redirectUrl = `${baseRoute}${redirect}`;

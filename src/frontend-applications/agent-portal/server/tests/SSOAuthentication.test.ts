@@ -2,7 +2,6 @@ import * as chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { doSSOLogin } from '../routes/SSOAuthentication';
 import { UserType } from '../../modules/user/model/UserType';
-import { APIHeader } from '../api/APIHeader';
 import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { IncomingHttpHeaders } from 'http';
 import { MFAToken } from '../../modules/multifactor-authentication/model/MFAToken';
@@ -14,6 +13,17 @@ const expect = chai.expect;
 describe('SSO Authentication', () => {
 
     describe('Request with empty cookies and headers (initial site call)', () => {
+        let originalDeleteSessionCookie;
+
+        before(() => {
+            originalDeleteSessionCookie = AuthenticationService.deleteSessionCookie;
+
+            AuthenticationService.deleteSessionCookie = (request: FastifyRequest, application: string): void => {
+                expect(request).not.undefined;
+                expect(application).equals('agent-portal');
+            }
+        });
+
         const request = {
             cookies: {},
             headers: {}
@@ -42,8 +52,12 @@ describe('SSO Authentication', () => {
         }
 
         it('Should redirect to auth page and start negotiation process.', async () => {
-            const ssoSuccess = await doSSOLogin(request as any, reply as any, true, '', UserType.AGENT);
+            const ssoSuccess = await doSSOLogin(request as any, reply as any, true, '', UserType.AGENT, 'agent-portal');
             expect(ssoSuccess).true;
+        })
+
+        after(() => {
+            AuthenticationService.deleteSessionCookie = originalDeleteSessionCookie;
         })
 
     });
@@ -59,7 +73,7 @@ describe('SSO Authentication', () => {
         const reply = {}
 
         it('Should return false -> Login Page should be loaded.', async () => {
-            const ssoSuccess = await doSSOLogin(request as any, reply as any, true, '', UserType.AGENT);
+            const ssoSuccess = await doSSOLogin(request as any, reply as any, true, '', UserType.AGENT, 'agent-portal');
             expect(ssoSuccess).false;
         })
 
@@ -76,7 +90,7 @@ describe('SSO Authentication', () => {
         const reply = {}
 
         it('Should return false -> Login Page should be loaded.', async () => {
-            const ssoSuccess = await doSSOLogin(request as any, reply as any, true, '', UserType.AGENT);
+            const ssoSuccess = await doSSOLogin(request as any, reply as any, true, '', UserType.AGENT, 'agent-portal');
             expect(ssoSuccess).false;
         })
 
@@ -128,6 +142,9 @@ describe('SSO Authentication', () => {
         const reply = {
             redirect: (route: string) => {
                 expect(route).equals('/tickets/3');
+            },
+            clearCookie: (cookie: string) => {
+                expect(cookie).equals('authNegotiationDone');
             }
         }
 
