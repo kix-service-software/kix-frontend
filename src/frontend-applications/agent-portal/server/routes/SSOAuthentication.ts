@@ -30,6 +30,7 @@ export async function doSSOLogin(
             authType = 'negotiate token (SSO)';
         } else if (!(req as any).cookies.authNegotiationDone && !(req as any).cookies.authNoSSO) {
             // no token - start the negotiation process
+            AuthenticationService.deleteSessionCookie(req, application);
             (reply as any).cookie('authNegotiationDone', true, { httpOnly: true, path: '/' });
             reply.header('WWW-Authenticate', 'Negotiate');
             reply.status(401);
@@ -66,6 +67,7 @@ export async function doSSOLogin(
             return false;
         }
 
+        (reply as any).clearCookie('authNegotiationDone');
         AuthenticationService.setSessionCookie(req, application, token);
         const url = APIUtil.getQueryValue(req, 'redirectUrl');
         const redirectUrl = url ? decodeURIComponent(url) : '/';
