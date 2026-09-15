@@ -160,6 +160,24 @@ export class QueueService extends KIXObjectService<Queue> {
         return hasValidDescendants;
     }
 
+    public async loadQueues(permissions: string[]): Promise<Queue[]> {
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.query = [];
+
+        if (permissions?.length) {
+            const user = await SessionAPIClient.getCurrentUser();
+            const requiredPermission = {
+                Object: KIXObjectType.USER,
+                ObjectID: user?.UserID,
+                Permission: permissions.join(',')
+            };
+            loadingOptions.query.push(['requiredPermission', JSON.stringify(requiredPermission)]);
+        }
+        const queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions)
+            .catch((): Queue[] => []);
+        return queues;
+    }
+
     public async getQueuesHierarchy(
         queues?: Queue[], permissions: string[] = [], filterIds?: Array<number>
     ): Promise<Queue[]> {
