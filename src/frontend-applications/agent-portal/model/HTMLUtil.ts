@@ -7,6 +7,7 @@
  * --
  */
 
+import { ConfigurationService } from '../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../server/services/LoggingService';
 
 export class HTMLUtil {
@@ -87,12 +88,22 @@ export class HTMLUtil {
         }
     }
 
-    public static buildHtmlStructur(content: string, additionalHeader: string[] = []): string {
+    public static buildHtmlStructur(
+        content: string, additionalHeader: string[] = [], isNoteArticle?: boolean,
+        application: string = 'agent-portal'
+    ): string {
+        const baseRoute = application === 'SSP'
+            ? ConfigurationService.getEnvString('BASE_ROUTE_SSP') || ''
+            : ConfigurationService.getEnvString('BASE_ROUTE') || '';
+
+
         return `
                     <!DOCTYPE html>
                     <html>
                         <head>
                             ${additionalHeader.join('\n')}
+                            ${isNoteArticle ? `<link rel="stylesheet" href="${baseRoute}/static/applications/application/lasso-less.css">` : ''}
+                            ${isNoteArticle ? `<link rel="stylesheet" href="${baseRoute}/static/article.css">` : ''}
                         </head>
                         <body>
                             ${content}
