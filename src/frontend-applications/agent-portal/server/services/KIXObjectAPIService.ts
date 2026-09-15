@@ -89,7 +89,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     public async loadObjects<O extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
-        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
+        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions,
+        useCache?: boolean, useToken?: boolean
     ): Promise<ObjectResponse<O>> {
         throw new Error('-1', `Method loadObjects not implemented (${objectType})`);
     }

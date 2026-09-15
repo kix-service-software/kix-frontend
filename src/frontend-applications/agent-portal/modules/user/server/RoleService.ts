@@ -63,14 +63,15 @@ export class RoleService extends KIXObjectAPIService {
 
     public async loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
-        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
+        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions,
+        useCache?: boolean, useToken?: boolean
     ): Promise<ObjectResponse<T>> {
 
         let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.ROLE) {
             objectResponse = await super.load(
                 token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE,
-                clientRequestId, Role
+                clientRequestId, Role, useCache, useToken
             );
         } else if (objectType === KIXObjectType.PERMISSION_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'permissiontypes');
