@@ -215,6 +215,8 @@ export class JobFormService extends KIXObjectFormService {
         // sort filter, to get same result if no changes were made (and "biggest" filter comes first)
         parameter.push([JobProperty.FILTER, filter.sort().reverse()]);
 
+        parameter = parameter.filter((p) => p[0].indexOf('###') === -1);
+
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 

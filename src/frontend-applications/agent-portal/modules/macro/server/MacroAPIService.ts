@@ -22,6 +22,7 @@ import { MacroActionType } from '../model/MacroActionType';
 import { MacroType } from '../model/MacroType';
 import { MacroProperty } from '../model/MacroProperty';
 import { MacroAction } from '../model/MacroAction';
+import { ArticleViewUtil } from '../../ticket/server/ArticleViewUtil';
 
 export class MacroAPIService extends KIXObjectAPIService {
 
@@ -298,6 +299,11 @@ export class MacroAPIService extends KIXObjectAPIService {
             const subMacroId = await this.createOrUpdateMacro(token, requestId, macro, update);
             action.Parameters['ElseMacroID'] = subMacroId;
         }
+
+        if (action.Parameters['Body']) {
+            action.Parameters['Body'] = await ArticleViewUtil.prepareArticleBody(action.Parameters['Body']);
+        }
+
 
         const actionId = await super.executeUpdateOrCreateRequest(
             token, requestId, parameter, uri, KIXObjectType.MACRO_ACTION, 'MacroActionID', create
