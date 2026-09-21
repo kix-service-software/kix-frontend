@@ -1,5 +1,6 @@
+/* eslint-disable max-lines-per-function */
 /**
- * Copyright (C) 2006-2026 KIX Service Software GmbH, https://www.kixdesk.com
+ * Copyright (C) 2006-2024 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,10 +23,30 @@ import { Article } from '../model/Article';
 import { ArticleLoadingOptions } from '../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../model/ArticleProperty';
 import { TicketAPIService } from './TicketService';
+import fs from 'fs';
+import path from 'path';
 import juice from 'juice';
 
 export class ArticleViewUtil {
 
+    private static readonly CKEDITOR_CSS_RELPATH = path.join(
+        'static', 'thirdparty', 'ckeditor5', 'ckeditor5.css'
+    );
+
+    private static ckEditorCss: string | null = null;
+    private static ckEditorCssLoadFailed = false;
+
+    private static readonly JUICE_INLINE_OPTIONS = {
+        applyStyleTags: true,
+        removeStyleTags: true,
+        preserveMediaQueries: false,
+        preserveFontFaces: false,
+        insertPreservedExtraCss: false,
+        applyAttributesTableElements: false,
+        inlinePseudoElements: false
+    };
+
+    // eslint-disable-next-line max-lines-per-function
     public static async getArticleHTMLContent(
         token: string, articleId: number, ticketId: number, reduceContent: boolean, resolveInlineCSS: boolean,
         linesCount?: number, prepareInline: boolean = true, relevantOrganisationID?: number,
@@ -45,10 +66,12 @@ export class ArticleViewUtil {
 
         let content = '';
         let isPlainText = false;
+        let isNoteArticle = false;
         if (articleResponse?.objects?.length) {
             const article = new Article(articleResponse.objects[0]);
-
+            isNoteArticle = article.Channel === 'note';
             if (article.bodyAttachment) {
+
                 content = await this.getHTMLContent(
                     token, ticketId, article, reduceContent, resolveInlineCSS,
                     linesCount, prepareInline, relevantOrganisationID
@@ -61,18 +84,18 @@ export class ArticleViewUtil {
                     .replace(/>/g, '&gt;')
                     .replace(/"/g, '&quot;')
                     .replace(/'/g, '&#039;');
-                content = `<pre>${content}</pre>`;
+                content = `<pre style="text-wrap: auto;">${content}</pre>`;
             }
         }
 
         if (!isPlainText && content) {
             const cleanHTML: any = HTMLUtil.sanitizeContent(content);
-            const additionalHeader = cleanHTML?.headers;
+            const additionalHeader = cleanHTML?.headers || [];
             content = cleanHTML?.content;
 
             // ignore kix styling (not needed in placeholder context, where reduce is used)
             if (!reduceContent) {
-                content = HTMLUtil.buildHtmlStructur(content, additionalHeader);
+                content = HTMLUtil.buildHtmlStructur(content, additionalHeader, isNoteArticle);
             }
         }
         return content;
@@ -92,10 +115,17 @@ export class ArticleViewUtil {
 
         const attachments = await TicketAPIService.getInstance().loadArticleAttachments(
             token, ticketId, article.ArticleID, attachmentIds, relevantOrganisationID
-        );
+        ).catch(() => []);
 
-        const contentAttachment = attachments.find((a) => a.ID === article.bodyAttachment.ID);
-        let content = this.getContent(contentAttachment);
+        let content;
+        const contentAttachment = attachments?.length ?
+            attachments.find((a) => a.ID === article.bodyAttachment.ID) : null;
+        if (contentAttachment) {
+            content = this.getContent(contentAttachment);
+        } else {
+            content = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br />\n');
+        }
+
         if (resolveInlineCSS) {
             content = await this.replaceInlineStyle(content);
         }
@@ -104,7 +134,7 @@ export class ArticleViewUtil {
             content = await this.reduceContent(content, linesCount);
         }
 
-        if (prepareInline) {
+        if (prepareInline && attachments?.length) {
             let inlineContent = [];
             const inline = attachments?.filter((a) => a.ID !== article.bodyAttachment.ID);
             inlineContent = this.prepareInlineContent(inline);
@@ -247,6 +277,60 @@ export class ArticleViewUtil {
         return body;
     }
 
+    public static async prepareArticleBody(body: string, application?: string): Promise<string> {
+        const configurationId = application?.toLowerCase() === 'ssp'
+            ? 'self-service-portal-configuration'
+            : 'agent-portal-configuration';
+
+        let config = await SysConfigService.getInstance().getSysConfigOptionValue(
+            ConfigurationService.getBackendAPIToken(), configurationId
+        ).catch(() => null);
+
+        let editorType = 'ckeditor5';
+        if (config) {
+            config = JSON.parse(config);
+            editorType = config?.editorType?.toLowerCase() || editorType;
+
+            if (!['tiptap', 'ckeditor5'].includes(editorType)) {
+                editorType = 'ckeditor5';
+            }
+        }
+
+        if (editorType === 'ckeditor5' && body) {
+            const ckEditorCss = await ArticleViewUtil.getCKEditorCss();
+
+            if (ckEditorCss) {
+                // wrap so the .ck-content-scoped selectors of the editor CSS match;
+                // unwrap after inlining to keep the original body structure
+                const wrapped = `<div class="ck-content">${body}</div>`;
+                try {
+                    body = juice.inlineContent(wrapped, ckEditorCss, ArticleViewUtil.JUICE_INLINE_OPTIONS);
+                    body = body.replace(/^<div class="ck-content"[^>]*>/, '').replace(/<\/div>\s*$/, '');
+                } catch (e) {
+                    LoggingService.getInstance().error('Error inlining CKEditor CSS.', e);
+                    body = ArticleViewUtil.inlineWithMailStyle(body);
+                }
+            } else {
+                // fallback: previous behaviour if CSS file is not available
+                body = ArticleViewUtil.inlineWithMailStyle(body);
+            }
+
+            const cleanHTML = HTMLUtil.sanitizeContent(body, false, true);
+            body = cleanHTML?.content || body;
+        }
+
+        return body;
+    }
+
+    private static inlineWithMailStyle(body: string): string {
+        try {
+            return juice(Article.MAIL_STYLE + body);
+        } catch (e) {
+            LoggingService.getInstance().error('Error resolving inline css (MAIL_STYLE fallback).', e);
+            return body;
+        }
+    }
+
     public static async replaceInlineStyle(content: string, create: boolean = false): Promise<string> {
         let error = '';
         try {
@@ -274,5 +358,77 @@ export class ArticleViewUtil {
         }
 
         return content;
+    }
+
+    private static async getCKEditorCss(): Promise<string | null> {
+        if (ArticleViewUtil.ckEditorCss !== null || ArticleViewUtil.ckEditorCssLoadFailed) {
+            return ArticleViewUtil.ckEditorCss;
+        }
+
+        const candidates = [
+            path.resolve(process.cwd(), ArticleViewUtil.CKEDITOR_CSS_RELPATH),
+            path.resolve(__dirname, '..', '..', '..', '..', '..', ArticleViewUtil.CKEDITOR_CSS_RELPATH)
+        ];
+
+        for (const cssPath of candidates) {
+            try {
+                const rawCss = await fs.promises.readFile(cssPath, 'utf8');
+                ArticleViewUtil.ckEditorCss = ArticleViewUtil.prepareCKEditorCss(rawCss);
+                return ArticleViewUtil.ckEditorCss;
+            } catch (e) {
+                LoggingService.getInstance().error(`CKEditor CSS not readable at ${cssPath}.`, e);
+            }
+        }
+
+        ArticleViewUtil.ckEditorCssLoadFailed = true;
+        return null;
+    }
+
+    private static prepareCKEditorCss(css: string): string {
+        // 1. collect custom properties, drop :root blocks (juice cannot inline them)
+        const variables = new Map<string, string>();
+        css = css.replace(/:root\s*\{([^{}]*)\}/g, (_match, block: string) => {
+            const declarationRegex = /(--[\w-]+)\s*:\s*([^;]+)/g;
+            let declaration = declarationRegex.exec(block);
+            while (declaration !== null) {
+                variables.set(declaration[1], declaration[2].trim());
+                declaration = declarationRegex.exec(block);
+            }
+            return '';
+        });
+
+        // 2. resolve var(...) usage (variables may reference other variables)
+        const resolveValue = (value: string, depth = 0): string => {
+            if (depth > 8 || !value.includes('var(')) {
+                return value;
+            }
+            return value.replace(
+                /var\(\s*(--[\w-]+)\s*(?:,\s*([^()]*))?\)/g,
+                (_match, name: string, fallback?: string) => {
+                    const defined = variables.get(name);
+                    if (defined !== undefined) {
+                        return resolveValue(defined, depth + 1);
+                    }
+                    return fallback !== undefined ? resolveValue(fallback.trim(), depth + 1) : 'inherit';
+                }
+            );
+        };
+        css = css.replace(/var\([^)]*\)/g, (match) => resolveValue(match));
+
+        // 3. drop at-rule blocks useless for inline styling
+        css = css.replace(/@(?:media|keyframes|font-face)[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, '');
+
+        // 4. keep only content-relevant rules
+        const contentRules: string[] = [];
+        const ruleRegex = /([^{}]+)\{([^{}]*)\}/g;
+        let rule = ruleRegex.exec(css);
+        while (rule !== null) {
+            if (rule[1].includes('.ck-content')) {
+                contentRules.push(`${rule[1].trim()}{${rule[2]}}`);
+            }
+            rule = ruleRegex.exec(css);
+        }
+
+        return contentRules.join('\n');
     }
 }

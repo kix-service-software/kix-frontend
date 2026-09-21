@@ -36,6 +36,8 @@ import { HTTPRequestLogger } from '../../../../server/services/HTTPRequestLogger
 import { Role } from '../../modules/user/model/Role';
 import { KIXObjectServiceRegistry } from './KIXObjectServiceRegistry';
 import { ObjectResponse } from './ObjectResponse';
+import { UserType } from '../../modules/user/model/UserType';
+import { IdService } from '../../model/IdService';
 
 export class HttpService {
 
@@ -58,21 +60,69 @@ export class HttpService {
         this.axios = require('axios');
     }
 
-    public async setUserRoleIds(user: User): Promise<void> {
-        if (user) {
-            const userRoleIds = user.RoleIDs?.sort();
-            const beToken = ConfigurationService.getBackendAPIToken();
-            const roleService = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.ROLE);
-            const roles = await roleService.loadObjects<Role>(
-                beToken, 'HTTPService', KIXObjectType.ROLE, userRoleIds, null, null
-            ).catch((): ObjectResponse<Role> => new ObjectResponse());
-
-            const agentRoleIds = roles?.objects?.filter((r) => r.UsageContext === 1 || r.UsageContext === 3);
-            const customerRoleIds = roles?.objects?.filter((r) => r.UsageContext === 2 || r.UsageContext === 3);
-
-            CacheService.getInstance().set(`USER_ROLE_IDS_${user.UserID}_Agent`, agentRoleIds, 'USER_ROLE_IDS');
-            CacheService.getInstance().set(`USER_ROLE_IDS_${user.UserID}_Customer`, customerRoleIds, 'USER_ROLE_IDS');
+    public async setUserRoleIds(user: User, userType?: string): Promise<number[] | null> {
+        if (!user) {
+            return null;
         }
+
+        const requestKey = `${KIXObjectType.CURRENT_USER}-${KIXObjectType.ROLE}-${user.UserID}`;
+        let requestPromise;
+        if (this.requestPromises.has(requestKey)) {
+            requestPromise = this.requestPromises.get(requestKey);
+        }
+        else {
+            requestPromise = (async (): Promise<ObjectResponse<Role>> => {
+                try {
+                    const userRoleIds = user.RoleIDs ? [...user.RoleIDs].sort() : [];
+                    const beToken = ConfigurationService.getBackendAPIToken();
+                    const roleService = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.ROLE);
+                    const roleResponse = await roleService.loadObjects<Role>(
+                        beToken, 'HTTPService', KIXObjectType.ROLE, userRoleIds, null, null, false
+                    ).catch((e): ObjectResponse<Role> => {
+                        LoggingService.getInstance().error('setUserRoleIds: role load failed', e);
+                        return new ObjectResponse<Role>();
+                    });
+                    return roleResponse;
+                } catch (e) {
+                    LoggingService.getInstance().error('setUserRoleIds: role load failed', e);
+                    return new ObjectResponse<Role>();
+                } finally {
+                    this.requestPromises.delete(requestKey);   // ← garantiert in ALLEN Pfaden
+                }
+            })();
+
+            this.requestPromises.set(requestKey, requestPromise);
+        }
+
+        const loadedRoles = await requestPromise.catch(() => {
+            return null;
+        });
+
+        let typeRoleIds: number[] | null = null;
+        Object.values(UserType).forEach((ut) => {
+            if (
+                userType === null
+                || userType === undefined
+                || userType === ut
+            ) {
+                const usageContext = ut === UserType.AGENT ? 1 : 2;
+                const contextRoles = loadedRoles?.objects?.filter(
+                    (r) => r.UsageContext === usageContext || r.UsageContext === 3
+                );
+                const roleIds = contextRoles?.map((cr) => cr.ID);
+                if (Array.isArray(roleIds) && roleIds.length > 0) {
+                    CacheService.getInstance().set(
+                        HttpService.roleIdsCacheKey(user.UserID, ut), roleIds, 'USER_ROLE_IDS'
+                    );
+
+                    if (userType === ut) {
+                        typeRoleIds = roleIds;
+                    }
+                }
+            }
+        });
+
+        return typeRoleIds;
     }
 
     public async get<T>(
@@ -88,11 +138,17 @@ export class HttpService {
         let promiseCacheKey: string;
         if (useCache) {
             cacheKey = await this.buildCacheKey(resource, queryParameters, token, useToken);
-            const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
-            if (cachedObject) {
-                return cachedObject;
+
+            if (cacheKey === null) {
+                useCache = false;
             }
-            promiseCacheKey = `${cacheKeyPrefix};${cacheKey}`;
+            else {
+                const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+                if (cachedObject) {
+                    return cachedObject;
+                }
+                promiseCacheKey = `${cacheKeyPrefix};${cacheKey}`;
+            }
         }
 
         if (useCache && this.requestPromises.has(promiseCacheKey)) {
@@ -186,25 +242,23 @@ export class HttpService {
             data: content
         };
 
-        let cacheId = '';
-        if (token) {
-            const backendToken = AuthenticationService.getInstance().getBackendToken(token);
-            const decodedToken = AuthenticationService.getInstance().decodeToken(backendToken);
-            const userId = decodedToken?.UserID;
-            const userType = decodedToken?.UserType;
-            const roleIds = await CacheService.getInstance().get(
-                `USER_ROLE_IDS_${userId}_${userType}`, 'USER_ROLE_IDS'
-            );
-            cacheId = roleIds + userType;
+        let cacheId = await this.buildCacheId(token);
+        let useCache = true;
+        if (cacheId === null) {
+            cacheId = IdService.generateDateBasedId('options-');
+            useCache = false;
         }
 
         const cacheKey = cacheId + resource;
         const cacheType = collection === null || typeof collection === 'undefined' || collection
             ? 'OPTION_COLLECTION'
             : RequestMethod.OPTIONS;
-        const cachedObject = await CacheService.getInstance().get(cacheKey, cacheType);
-        if (cachedObject) {
-            return cachedObject;
+
+        if (useCache) {
+            const cachedObject = await CacheService.getInstance().get(cacheKey, cacheType);
+            if (cachedObject) {
+                return cachedObject;
+            }
         }
 
         if (!this.requestPromises.has(cacheKey)) {
@@ -223,7 +277,10 @@ export class HttpService {
         });
 
         const optionsResponse = new OptionsResponse(response.headers, response.data);
-        CacheService.getInstance().set(cacheKey, optionsResponse, cacheType);
+
+        if (useCache) {
+            CacheService.getInstance().set(cacheKey, optionsResponse, cacheType);
+        }
         this.requestPromises.delete(cacheKey);
 
         return optionsResponse;
@@ -354,18 +411,16 @@ export class HttpService {
         }
     }
 
-    private async buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): Promise<string> {
+    private async buildCacheKey(
+        resource: string, query: any, token: string, useToken?: boolean
+    ): Promise<string | null> {
         let cacheId = token;
         if (!useToken) {
-            const backendToken = AuthenticationService.getInstance().getBackendToken(token);
-            const decodedToken = AuthenticationService.getInstance().decodeToken(backendToken);
-            const userId = decodedToken?.UserID;
-            const userType = decodedToken?.UserType;
-                        const roleIds = await CacheService.getInstance().get(
-                            `USER_ROLE_IDS_${userId}_${userType}`, 'USER_ROLE_IDS'
-                        );
-                        cacheId = roleIds + userType;
+            cacheId = await this.buildCacheId(token);
 
+            if (cacheId === null) {
+                return null;
+            }
         }
         const ordered = {};
 
@@ -380,6 +435,41 @@ export class HttpService {
 
         return key;
     }
+
+    private async buildCacheId(token: string): Promise<string | null> {
+        if (!token) {
+            return null;
+        }
+
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+        const decodedToken = AuthenticationService.getInstance().decodeToken(backendToken);
+        const userId = decodedToken?.UserID;
+        const userType = decodedToken?.UserType;
+
+        if (!userId || !userType) {
+            return null;
+        }
+
+        let roleIds = await CacheService.getInstance().get(
+            HttpService.roleIdsCacheKey(userId, userType), 'USER_ROLE_IDS'
+        );
+        if (Array.isArray(roleIds) && roleIds.length > 0) {
+            return roleIds.join(',') + userType;
+        }
+
+        const user = await this.getUserByToken(token);
+        roleIds = await this.setUserRoleIds(user, userType);
+        if (Array.isArray(roleIds) && roleIds.length > 0) {
+            return roleIds.join(',') + userType;
+        }
+
+        return null;
+    }
+
+    private static roleIdsCacheKey(userId: string | number, userType: string): string {
+        return `USER_ROLE_IDS_${userId}_${userType}`;
+    }
+
 
     public async getUserByToken(token: string): Promise<User> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
@@ -435,7 +525,6 @@ export class HttpService {
             CacheService.getInstance().set(backendToken, user, cacheType);
             HTTPRequestLogger.getInstance().stop(profileTaskId, response);
             this.requestPromises.delete(requestKey);
-            this.setUserRoleIds(user);
             resolve(user);
         });
 
