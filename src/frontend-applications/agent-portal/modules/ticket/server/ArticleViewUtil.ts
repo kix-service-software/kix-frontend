@@ -66,10 +66,10 @@ export class ArticleViewUtil {
 
         let content = '';
         let isPlainText = false;
-        let useKixCss = false;
+        let isNoteArticle = false;
         if (articleResponse?.objects?.length) {
             const article = new Article(articleResponse.objects[0]);
-            useKixCss = article.Channel === 'note';
+            isNoteArticle = article.Channel === 'note';
             if (article.bodyAttachment) {
 
                 content = await this.getHTMLContent(
@@ -90,12 +90,12 @@ export class ArticleViewUtil {
 
         if (!isPlainText && content) {
             const cleanHTML: any = HTMLUtil.sanitizeContent(content);
-            const additionalHeader = cleanHTML?.headers;
+            const additionalHeader = cleanHTML?.headers || [];
             content = cleanHTML?.content;
 
             // ignore kix styling (not needed in placeholder context, where reduce is used)
             if (!reduceContent) {
-                content = HTMLUtil.buildHtmlStructur(content, additionalHeader, useKixCss);
+                content = HTMLUtil.buildHtmlStructur(content, additionalHeader, isNoteArticle);
             }
         }
         return content;
